@@ -26,6 +26,9 @@ spring:
           temperature: 0.7
           max-tokens: 3000
 
+firebase:
+  api-key: ${FIREBASE_API_KEY:AIzaSyBfxMGcCCOhpMXVMAft6ShnfR4gPjKzDUY}
+
 logging:
   level:
     root: INFO

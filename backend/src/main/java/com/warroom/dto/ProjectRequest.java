@@ -14,12 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProjectRequest {
 
-    @NotBlank(message = "Title is required")
-    private String title;
+    @NotBlank(message = "Project Name is required")
+    private String projectName;
 
-    @NotBlank(message = "Description is required")
-    private String description;
+    @NotBlank(message = "Core Hypothesis is required")
+    private String coreHypothesis;
 
-    @NotBlank(message = "Project type is required")
     private String type; // e.g., RESEARCH, STARTUP, ML
 }

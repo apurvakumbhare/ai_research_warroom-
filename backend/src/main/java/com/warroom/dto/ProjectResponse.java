@@ -17,8 +17,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProjectResponse {
     private UUID id;
-    private String title;
-    private String description;
+    private String projectName;
+    private String coreHypothesis;
+    private String ownerId;
+    private java.util.List<String> participantIds;
     private String type;
     private String status;
     private String finalContent;

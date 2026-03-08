@@ -47,4 +47,16 @@ public class DebateController {
         DebateResponse response = warRoomOrchestrator.getOrchestrationStatus(projectId);
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Injects human intervention into the debate.
+     */
+    @PostMapping("/{projectId}/inject")
+    public ResponseEntity<Void> injectMessage(@PathVariable UUID projectId,
+            @RequestBody java.util.Map<String, String> payload) {
+        log.info("Injecting human message into debate for project id: {}", projectId);
+        String text = payload.get("text");
+        warRoomOrchestrator.injectMessage(projectId, text);
+        return ResponseEntity.ok().build();
+    }
 }

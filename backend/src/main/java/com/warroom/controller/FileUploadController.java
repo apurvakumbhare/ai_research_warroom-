@@ -22,15 +22,22 @@ public class FileUploadController {
     private final FileProcessingService fileProcessingService;
 
     /**
-     * Uploads a PDF and returns the cleaned, extracted text.
+     * Uploads a PDF, stores in Firebase Storage, and returns the cleaned, extracted
+     * text.
      * 
-     * @param file the multipart PDF file
+     * @param file       the multipart file
+     * @param projectId  optional project ID to link the upload
+     * @param uploadedBy optional user ID who uploaded
      * @return the processed and cleaned text content
      */
     @PostMapping
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        log.info("Received file upload request for: {}", file.getOriginalFilename());
-        String processedText = fileProcessingService.processPdf(file);
+    public ResponseEntity<String> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "projectId", required = false) String projectId,
+            @RequestParam(value = "uploadedBy", defaultValue = "Anonymous") String uploadedBy) {
+
+        log.info("Received file upload request for: {} (Project: {})", file.getOriginalFilename(), projectId);
+        String processedText = fileProcessingService.processPdf(file, projectId, uploadedBy);
         return ResponseEntity.ok(processedText);
     }
 }

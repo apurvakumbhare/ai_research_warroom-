@@ -27,4 +27,6 @@ public class DebateResponse {
     private String message;
 
     private LocalDateTime startedAt;
+
+    private java.util.List<AgentMessage> messages;
 }

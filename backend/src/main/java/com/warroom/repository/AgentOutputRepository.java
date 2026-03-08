@@ -44,4 +44,14 @@ public class AgentOutputRepository {
     public List<AgentOutput> findByDebateSessionId(UUID sessionId) {
         return findByDebateSessionId(sessionId.toString());
     }
+
+    public List<AgentOutput> findByDebateSessionIdOrderByGeneratedAtAsc(String sessionId) {
+        List<AgentOutput> outputs = findByDebateSessionId(sessionId);
+        outputs.sort((a, b) -> {
+            if (a.getGeneratedAt() == null || b.getGeneratedAt() == null)
+                return 0;
+            return a.getGeneratedAt().compareTo(b.getGeneratedAt());
+        });
+        return outputs;
+    }
 }

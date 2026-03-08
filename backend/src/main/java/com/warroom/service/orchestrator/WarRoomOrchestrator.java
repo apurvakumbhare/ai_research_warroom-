@@ -31,6 +31,7 @@ public class WarRoomOrchestrator {
     private final DebateSessionRepository debateSessionRepository;
     private final AgentOutputRepository agentOutputRepository;
     private final DebatePipeline debatePipeline;
+    private final com.warroom.service.agent.OpenAIClient openAIClient;
 
     /**
      * Executes the full multi-agent debate and refinement chain for a project.
@@ -93,7 +94,16 @@ public class WarRoomOrchestrator {
      * Entry point for starting the orchestration process.
      */
     public WarRoomResult startOrchestration(UUID projectId) {
-        return executeWarRoom(projectId);
+        // Run asynchronously so the REST API can return immediately
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            try {
+                executeWarRoom(projectId);
+            } catch (Exception e) {
+                log.error("Async execution failed for project {}", projectId, e);
+            }
+        });
+
+        return WarRoomResult.builder().build(); // Initial empty return
     }
 
     /**
@@ -101,14 +111,111 @@ public class WarRoomOrchestrator {
      */
     public DebateResponse getOrchestrationStatus(UUID projectId) {
         DebateSession session = debateSessionRepository.findFirstByProjectIdOrderByStartedAtDesc(projectId)
-                .orElseThrow(
-                        () -> new WarRoomException("SESSION_NOT_FOUND", "No session found for project: " + projectId));
+                .orElse(null);
+
+        if (session == null) {
+            return DebateResponse.builder()
+                    .projectId(projectId)
+                    .status("NOT_STARTED")
+                    .message("No debate session found")
+                    .build();
+        }
+
+        // Fetch outputs and map to AgentMessage
+        java.util.List<com.warroom.dto.AgentMessage> messages = new java.util.ArrayList<>();
+        java.util.List<AgentOutput> outputs = agentOutputRepository
+                .findByDebateSessionIdOrderByGeneratedAtAsc(session.getId());
+
+        for (AgentOutput output : outputs) {
+            String role = output.getAgentName();
+            String avatar = "smart_toy";
+            String color = "var(--primary)";
+            String align = "left";
+
+            if ("RESEARCHER".equals(role)) {
+                avatar = "search_insights";
+                color = "var(--ocean)";
+            } else if ("CRITIC".equals(role)) {
+                avatar = "gavel";
+                color = "var(--driftwood)";
+                align = "right";
+            } else if ("OPTIMIZER".equals(role) || "DEVIL".equals(role)) {
+                avatar = "psychology";
+                align = "right";
+            }
+
+            String time = output.getGeneratedAt() != null
+                    ? String.format("%02d:%02d:%02d", output.getGeneratedAt().getHour(),
+                            output.getGeneratedAt().getMinute(), output.getGeneratedAt().getSecond())
+                    : "";
+
+            messages.add(com.warroom.dto.AgentMessage.builder()
+                    .sender(role)
+                    .avatar(avatar)
+                    .color(color)
+                    .time(time)
+                    .align(align)
+                    .content(output.getOutput())
+                    .build());
+        }
 
         return DebateResponse.builder()
                 .projectId(projectId)
                 .status(session.getStatus())
                 .message("Current debate status")
                 .startedAt(session.getStartedAt())
+                .messages(messages)
                 .build();
+    }
+
+    /**
+     * Injects a human intervention into the debate.
+     */
+    public void injectMessage(UUID projectId, String userText) {
+        DebateSession session = debateSessionRepository.findFirstByProjectIdOrderByStartedAtDesc(projectId)
+                .orElseThrow(() -> new WarRoomException("SESSION_NOT_FOUND", "No active session found"));
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new WarRoomException("PROJECT_NOT_FOUND", "Project not found"));
+
+        // 1. Save user input
+        AgentOutput userOutput = AgentOutput.builder()
+                .debateSessionId(session.getId())
+                .projectId(project.getId())
+                .agentName("User (Moderator)")
+                .output(userText)
+                .iteration(99)
+                .generatedAt(java.time.LocalDateTime.now())
+                .build();
+        agentOutputRepository.save(userOutput);
+
+        // 2. Fetch history and respond
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            try {
+                java.util.List<AgentOutput> history = agentOutputRepository
+                        .findByDebateSessionIdOrderByGeneratedAtAsc(session.getId());
+                String historyStr = history.stream().map(o -> o.getAgentName() + ": " + o.getOutput())
+                        .collect(java.util.stream.Collectors.joining("\n"));
+
+                String prompt = "You are an AI Coordinator in the War-Room. The human moderator just intervened with: \""
+                        + userText + "\".\n" +
+                        "Based on the debate history:\n" + historyStr + "\n\n" +
+                        "Respond briefly to the human intervention, proposing a way to incorporate their feedback into the active debate.";
+
+                String aiResponse = openAIClient.call(prompt);
+
+                AgentOutput reactionOutput = AgentOutput.builder()
+                        .debateSessionId(session.getId())
+                        .projectId(project.getId())
+                        .agentName("Coordinator")
+                        .output(aiResponse)
+                        .iteration(100)
+                        .generatedAt(java.time.LocalDateTime.now())
+                        .build();
+                agentOutputRepository.save(reactionOutput);
+            } catch (Exception e) {
+                log.error("Failed to process injection for project {}", projectId, e);
+            }
+        });
     }
 }

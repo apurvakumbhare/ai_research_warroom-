@@ -32,7 +32,7 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponse create(ProjectRequest request) {
-        log.info("Creating new project: {}", request.getTitle());
+        log.info("Creating new project: {}", request.getProjectName());
         Project project = projectMapper.toEntity(request);
         Project savedProject = projectRepository.save(project);
         return projectMapper.toResponse(savedProject);

@@ -19,9 +19,13 @@ public class Project {
     @DocumentId
     private String id;
 
-    private String title;
+    private String projectName;
 
-    private String description;
+    private String coreHypothesis;
+
+    private String ownerId;
+
+    private java.util.List<String> participantIds;
 
     private String type;
 
@@ -32,5 +36,4 @@ public class Project {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
 }

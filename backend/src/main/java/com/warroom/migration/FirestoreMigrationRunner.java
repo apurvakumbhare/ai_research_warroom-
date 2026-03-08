@@ -71,8 +71,8 @@ public class FirestoreMigrationRunner implements CommandLineRunner {
             while (rs.next()) {
                 Project p = new Project();
                 p.setId(rs.getString("id"));
-                p.setTitle(rs.getString("title"));
-                p.setDescription(rs.getString("description"));
+                p.setProjectName(rs.getString("title"));
+                p.setCoreHypothesis(rs.getString("description"));
                 p.setType(rs.getString("type"));
                 p.setStatus(rs.getString("status"));
                 p.setFinalContent(rs.getString("final_content"));

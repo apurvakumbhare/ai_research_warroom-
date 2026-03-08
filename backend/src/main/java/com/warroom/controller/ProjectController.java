@@ -26,7 +26,7 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(@RequestBody ProjectRequest request) {
-        log.info("Received request to create project: {}", request.getTitle());
+        log.info("Received request to create project: {}", request.getProjectName());
         return ResponseEntity.status(HttpStatus.CREATED).body(projectService.create(request));
     }
 

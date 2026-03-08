@@ -27,6 +27,7 @@ public class DebatePipeline {
 
     private final OpenAIClient openAIClient;
     private final AgentOutputRepository agentOutputRepository;
+    private final com.google.cloud.firestore.Firestore firestore;
 
     /**
      * Runs the sequential debate chain: Researcher -> Critic -> Optimizer ->
@@ -39,13 +40,34 @@ public class DebatePipeline {
     public WarRoomResult runDebate(Project project, DebateSession session) {
         log.info("Starting sequential agent pipeline for session: {}", session.getId());
 
+        // Fetch extracted text from file uploads
+        StringBuilder extractedContext = new StringBuilder();
+        try {
+            java.util.List<com.google.cloud.firestore.QueryDocumentSnapshot> documents = firestore
+                    .collection("projects").document(project.getId()).collection("uploads").get().get().getDocuments();
+            for (com.google.cloud.firestore.QueryDocumentSnapshot doc : documents) {
+                if (doc.contains("extractedText") && doc.getString("extractedText") != null) {
+                    extractedContext.append(doc.getString("fileName")).append(":\n")
+                            .append(doc.getString("extractedText")).append("\n\n");
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Failed to fetch upload context for project {}", project.getId(), e);
+        }
+
+        String combinedHypothesis = project.getCoreHypothesis();
+        if (extractedContext.length() > 0) {
+            combinedHypothesis += "\n\n--- EXTRACTED ATTACHMENT CONTEXT ---\n" + extractedContext.toString();
+        }
+
         // 1. Researcher Phase
-        String researcherPrompt = PromptTemplates.buildStrategistPrompt(project.getTitle(), project.getDescription());
+        String researcherPrompt = PromptTemplates.buildStrategistPrompt(project.getProjectName(),
+                combinedHypothesis);
         String researcherRaw = openAIClient.call(researcherPrompt);
         saveAgentOutput(session, project, "RESEARCHER", researcherRaw, 1);
 
         // 2. Critic Phase
-        String criticPrompt = PromptTemplates.buildCriticPrompt(project.getTitle(), researcherRaw);
+        String criticPrompt = PromptTemplates.buildCriticPrompt(project.getProjectName(), researcherRaw);
         String criticRaw = openAIClient.call(criticPrompt);
         saveAgentOutput(session, project, "CRITIC", criticRaw, 1);
 

@@ -25,8 +25,8 @@ public class ProjectMapper {
         }
 
         return Project.builder()
-                .title(request.getTitle())
-                .description(request.getDescription())
+                .projectName(request.getProjectName())
+                .coreHypothesis(request.getCoreHypothesis())
                 .type(request.getType())
                 .status("CREATED")
                 .build();
@@ -45,8 +45,10 @@ public class ProjectMapper {
 
         return ProjectResponse.builder()
                 .id(project.getId() != null ? java.util.UUID.fromString(project.getId()) : null)
-                .title(project.getTitle())
-                .description(project.getDescription())
+                .projectName(project.getProjectName())
+                .coreHypothesis(project.getCoreHypothesis())
+                .ownerId(project.getOwnerId())
+                .participantIds(project.getParticipantIds())
                 .type(project.getType())
                 .status(project.getStatus())
                 .finalContent(project.getFinalContent())
@@ -67,8 +69,8 @@ public class ProjectMapper {
             return;
         }
 
-        project.setTitle(request.getTitle());
-        project.setDescription(request.getDescription());
+        project.setProjectName(request.getProjectName());
+        project.setCoreHypothesis(request.getCoreHypothesis());
         project.setType(request.getType());
         // status, finalContent, and audit fields are handled by services or JPA
         // listeners
