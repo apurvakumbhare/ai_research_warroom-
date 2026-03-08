@@ -66,8 +66,15 @@ public class AuthService {
             log.info("Successfully registered and provisioned user in Firestore: {}", localId);
 
             return new AuthResponse(idToken, localId, "Success");
+        } catch (org.springframework.web.client.HttpClientErrorException e) {
+            String errorResponse = e.getResponseBodyAsString();
+            if (errorResponse.contains("EMAIL_EXISTS")) {
+                throw new Exception("Email already registered. Please login instead.");
+            }
+            log.error("Firebase Auth registration failed: {}", errorResponse);
+            throw new Exception("Registration failed: " + e.getStatusText());
         } catch (Exception e) {
-            log.error("Registration failed", e);
+            log.error("Registration error", e);
             throw new Exception("Registration failed: " + e.getMessage());
         }
     }
