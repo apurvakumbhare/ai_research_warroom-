@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#a7c7e7",
+                "background-light": "#f6f7f8",
+                "background-dark": "#13191f",
+                "sand": "#f4ede4",
+                "driftwood": "#5d5048",
+                "ocean": "#7ba8d1"
+              },
+              fontFamily: {
+                "display": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<title>AI Research War-Room | Debate Workspace</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-3 z-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg text-driftwood">
+<span class="material-symbols-outlined block">waves</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold tracking-tight">AI Research War-Room</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Workspace</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Archive</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<label class="hidden sm:flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-1.5 w-64">
+<span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-slate-400" placeholder="Search intel..." type="text"/>
+</label>
+<div class="flex gap-2">
+<button class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+</button>
+<button class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">share</span>
+</button>
+</div>
+<div class="size-9 rounded-full bg-sand border-2 border-white shadow-sm flex items-center justify-center overflow-hidden" data-alt="User profile avatar with beach background">
+<img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBBOgTR8hIMjGXfSmqgTp7K6cIXp9S1i7tfQrsNhQUbMszLXYrPqLGeafEqvofRzqLhS6qpOmpMxXpAVoL-og0vifcd-0oS4TlSOaw5HM7etvJwmOj0MoqM2t9BHv42UXl2qeD84j8EaB8R8gLWkJxgWjqr5DxMigOsxRt3IcfWWZfcmU7OhWwarTMZfNJSyPGz-FmQ95z5qHDyZMjRv5ik10bTFLQxbZF0LHorzS7gfmqKcon0zLnS3vOQhN9e1gw5AA5u4sw6k8"/>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<!-- Left Panel: Project Intel -->
+<aside class="w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark overflow-y-auto hidden lg:flex flex-col">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-sand/30">
+<h3 class="font-bold text-driftwood dark:text-primary mb-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">folder_open</span> Project Intel
+                    </h3>
+<p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Current Context: AGI Safety</p>
+</div>
+<div class="p-4 space-y-4">
+<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold py-0.5 px-2 rounded-full bg-ocean/20 text-ocean">PAPER</span>
+<span class="text-[10px] text-slate-400">2h ago</span>
+</div>
+<h4 class="text-sm font-semibold mb-1">Scaling Laws for Neural Models</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">Key takeaway: Performance improvements follow predictable curves relative to compute.</p>
+</div>
+<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold py-0.5 px-2 rounded-full bg-primary/20 text-driftwood">DATASET</span>
+<span class="text-[10px] text-slate-400">Yesterday</span>
+</div>
+<h4 class="text-sm font-semibold mb-1">Human-in-the-loop Metrics</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">Aggregated preference data from expert review panels.</p>
+</div>
+<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold py-0.5 px-2 rounded-full bg-amber-100 text-amber-700">ALERT</span>
+<span class="text-[10px] text-slate-400">10m ago</span>
+</div>
+<h4 class="text-sm font-semibold mb-1">GPU Cluster Latency Spike</h4>
+<p class="text-xs text-slate-600 dark:text-slate-400">Nodes 14-22 experiencing degraded performance. Debates may lag.</p>
+</div>
+</div>
+<div class="mt-auto p-4 border-t border-slate-100 dark:border-slate-800">
+<button class="w-full flex items-center justify-center gap-2 bg-driftwood text-white py-2 rounded-xl text-sm font-semibold hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+                        Upload New Intel
+                    </button>
+</div>
+</aside>
+<!-- Center Panel: Live Debate Timeline -->
+<section class="flex-1 flex flex-col bg-slate-50 dark:bg-slate-900 overflow-hidden">
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark flex justify-between items-center">
+<div>
+<h2 class="text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">Live Debate: Session Alpha</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="flex h-2 w-2 rounded-full bg-green-500"></span>
+<span class="text-xs text-slate-500 font-medium">Topic: Interpretability vs. Efficiency</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800">PAUSE</button>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-slate-900 text-xs font-bold shadow-sm">EXPORT LOGS</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Message 1 -->
+<div class="flex gap-4 max-w-3xl">
+<div class="flex-shrink-0 size-10 rounded-full bg-ocean flex items-center justify-center text-white" data-alt="Researcher agent icon avatar">
+<span class="material-symbols-outlined">search_insights</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-bold text-sm">Researcher-01</span>
+<span class="text-[10px] text-slate-400">14:02:11</span>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-slate-700">
+<p class="text-sm leading-relaxed">Based on the recent scaling data, I propose that we prioritize model size over immediate interpretability layers. The performance gap is widening too rapidly to ignore.</p>
+</div>
+</div>
+</div>
+<!-- Message 2 -->
+<div class="flex gap-4 max-w-3xl ml-auto flex-row-reverse">
+<div class="flex-shrink-0 size-10 rounded-full bg-driftwood flex items-center justify-center text-white" data-alt="Critic agent icon avatar">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div class="space-y-1 text-right">
+<div class="flex items-center gap-2 justify-end">
+<span class="text-[10px] text-slate-400">14:02:45</span>
+<span class="font-bold text-sm text-driftwood dark:text-primary">Critic-Alpha</span>
+</div>
+<div class="bg-sand/30 dark:bg-primary/10 p-4 rounded-2xl rounded-tr-none shadow-sm border border-primary/20">
+<p class="text-sm leading-relaxed">I disagree. Scaling without interpretability is a safety debt. We found 4 cases in the Intel logs where black-box models failed silently in edge cases.</p>
+</div>
+</div>
+</div>
+<!-- Message 3 -->
+<div class="flex gap-4 max-w-3xl">
+<div class="flex-shrink-0 size-10 rounded-full bg-primary flex items-center justify-center text-slate-800" data-alt="Optimizer agent icon avatar">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-bold text-sm">Optimizer-X</span>
+<span class="text-[10px] text-slate-400">14:03:12</span>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-slate-700">
+<p class="text-sm leading-relaxed">Could we meet in the middle? Use a 70/30 split of compute for parameter scaling vs attention-head visualization. I've calculated the Pareto frontier for this approach.</p>
+<div class="mt-3 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-dashed border-slate-300 dark:border-slate-600">
+<div class="h-24 w-full bg-gradient-to-r from-sand to-ocean opacity-30 flex items-center justify-center rounded" data-alt="Abstract gradient visualization chart">
+<span class="text-[10px] font-bold text-driftwood uppercase">Visualizing Optimization Vector</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800">
+<div class="flex gap-2">
+<div class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-xl px-4 py-2 flex items-center border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-slate-400 mr-2">smart_toy</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full" placeholder="Inject human instruction or query agents..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-ocean text-slate-900 font-bold px-6 py-2 rounded-xl shadow-sm transition-colors">
+                            INJECT
+                        </button>
+</div>
+</div>
+</section>
+<!-- Right Panel: Agent Status -->
+<aside class="w-72 flex-shrink-0 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark overflow-y-auto hidden xl:flex flex-col">
+<div class="p-6">
+<h3 class="font-bold text-slate-900 dark:text-slate-100 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">memory</span> Agent Status
+                    </h3>
+<div class="space-y-6">
+<!-- Agent 1 -->
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="size-12 rounded-full bg-ocean flex items-center justify-center text-white" data-alt="Researcher agent profile circle">
+<span class="material-symbols-outlined">search_insights</span>
+</div>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-background-dark rounded-full"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-bold">Researcher</span>
+<span class="text-[10px] text-green-500 font-bold">ACTIVE</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-1.5">
+<div class="bg-ocean h-full rounded-full w-[85%]"></div>
+</div>
+<p class="text-[10px] text-slate-400 mt-1 italic">Parsing ArXiv PDFs...</p>
+</div>
+</div>
+<!-- Agent 2 -->
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="size-12 rounded-full bg-driftwood flex items-center justify-center text-white" data-alt="Critic agent profile circle">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-background-dark rounded-full"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-bold">Critic</span>
+<span class="text-[10px] text-green-500 font-bold">THINKING</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-1.5">
+<div class="bg-driftwood h-full rounded-full w-[40%]"></div>
+</div>
+<p class="text-[10px] text-slate-400 mt-1 italic">Validating claims...</p>
+</div>
+</div>
+<!-- Agent 3 -->
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="size-12 rounded-full bg-primary flex items-center justify-center text-slate-800" data-alt="Optimizer agent profile circle">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div class="absolute bottom-0 right-0 size-3 bg-amber-400 border-2 border-white dark:border-background-dark rounded-full"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-bold">Optimizer</span>
+<span class="text-[10px] text-amber-500 font-bold">IDLE</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-1.5">
+<div class="bg-primary h-full rounded-full w-[0%]"></div>
+</div>
+<p class="text-[10px] text-slate-400 mt-1 italic">Awaiting debate turn</p>
+</div>
+</div>
+<!-- Agent 4 -->
+<div class="flex items-center gap-4 opacity-50">
+<div class="relative">
+<div class="size-12 rounded-full bg-slate-300 dark:bg-slate-700 flex items-center justify-center text-slate-600" data-alt="Moderator agent profile circle">
+<span class="material-symbols-outlined">balance</span>
+</div>
+<div class="absolute bottom-0 right-0 size-3 bg-slate-400 border-2 border-white dark:border-background-dark rounded-full"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between">
+<span class="text-sm font-bold">Moderator</span>
+<span class="text-[10px] text-slate-400 font-bold">OFFLINE</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-1.5">
+<div class="bg-slate-400 h-full rounded-full w-0"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-10 p-4 bg-sand rounded-xl text-driftwood">
+<h4 class="text-xs font-bold uppercase tracking-widest mb-2">Workspace Health</h4>
+<div class="flex items-center justify-between text-[11px] mb-1">
+<span>Tokens/Sec</span>
+<span class="font-bold">2.4k</span>
+</div>
+<div class="flex items-center justify-between text-[11px]">
+<span>Consensus</span>
+<span class="font-bold">42%</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Bottom Navigation Mobile -->
+<nav class="lg:hidden flex border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-6 py-3 justify-around">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-[10px] font-bold">Debate</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">folder</span>
+<span class="text-[10px] font-bold">Intel</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="text-[10px] font-bold">Agents</span>
+</button>
+</nav>
+</div>
+</body></html>

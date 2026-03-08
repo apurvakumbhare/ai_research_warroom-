@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | AI Research War-Room</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .settings-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .settings-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-light);
+            color: var(--slate-800);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .settings-card {
+            background: #fff;
+            border: 1px solid var(--slate-100);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--slate-50);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h4 {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--slate-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .setting-info p {
+            font-size: 0.8125rem;
+            color: var(--slate-500);
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slate-200);
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+            box-shadow: var(--shadow-sm);
+        }
+
+        input:checked+.slider {
+            background-color: var(--driftwood);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        .select-field {
+            padding: 0.625rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--slate-200);
+            background: #fff;
+            font-size: 0.875rem;
+            color: var(--slate-700);
+            min-width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="p-6 flex items-center gap-3">
+                <div class="message-avatar" style="background: var(--ocean); color: #fff; width: 32px; height: 32px;">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">waves</span>
+                </div>
+                <div>
+                    <h2 style="font-size: 0.9375rem; font-weight: 800; color: var(--slate-900); line-height: 1;">
+                        War-Room</h2>
+                    <p
+                        style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Strategic Ops</p>
+                </div>
+            </div>
+
+            <nav class="flex-col gap-1 p-4">
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="my_upload.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">account_tree</span>
+                    Projects
+                </a>
+                <a href="debate.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">forum</span>
+                    Debate Room
+                </a>
+                <a href="reports.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">description</span>
+                    Reports
+                </a>
+                <a href="settings_beach.html" class="flex items-center gap-3 px-4 py-3 transition-all"
+                    style="border-radius: 0.75rem; background: var(--primary-light); color: var(--slate-900); font-weight: 600; border-left: 3px solid var(--ocean);">
+                    <span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+            </nav>
+
+            <div class="mt-auto p-4">
+                <button class="btn btn-primary w-full"
+                    style="background: var(--driftwood); color: #fff; justify-content: flex-start; padding: 0.75rem 1rem;">
+                    <span class="material-symbols-outlined">add</span>
+                    New Simulation
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main p-8">
+            <header class="flex justify-between items-center mb-10">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined" style="color: var(--ocean);">settings</span>
+                    <h1 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-900);">Settings</h1>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div style="position: relative;">
+                        <input type="text" placeholder="Search settings..."
+                            style="padding: 0.625rem 1rem 0.625rem 2.5rem; border-radius: var(--radius-full); border: 1px solid var(--slate-200); font-size: 0.8125rem; width: 240px; background: rgba(255,255,255,0.6);">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 18px;">search</span>
+                    </div>
+                    <button class="relative">
+                        <span class="material-symbols-outlined" style="color: var(--slate-500);">notifications</span>
+                        <div class="pulse" style="position: absolute; top: -2px; right: -2px; width: 6px; height: 6px;">
+                        </div>
+                    </button>
+                    <div
+                        style="width: 32px; height: 32px; border-radius: 50%; background: var(--sand-300); border: 1px solid #fff; box-shadow: var(--shadow-sm);">
+                    </div>
+                </div>
+            </header>
+
+            <div class="settings-container">
+                <div style="margin-bottom: 2.5rem;">
+                    <h2
+                        style="font-size: 2.25rem; font-weight: 800; color: var(--slate-900); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+                        War-Room Configuration</h2>
+                    <p style="color: var(--slate-500); font-size: 0.9375rem;">Fine-tune your research environment and
+                        tactical alerts.</p>
+                </div>
+
+                <!-- General Preferences -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon"><span class="material-symbols-outlined">public</span></div>
+                        <h3 class="section-title">General Preferences</h3>
+                    </div>
+                    <div class="settings-card"
+                        style="padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; background: rgba(255,255,255,0.3); backdrop-filter: blur(8px);">
+                        <div class="input-group">
+                            <label class="input-label">System Language</label>
+                            <select class="select-field">
+                                <option>English (US)</option>
+                                <option>Spanish (ES)</option>
+                                <option>French (FR)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Timezone</label>
+                            <select class="select-field">
+                                <option>(GMT-08:00) Pacific Time</option>
+                                <option>(GMT+00:00) Universal Coordinated Time</option>
+                                <option>(GMT+05:30) India Standard Time</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Protocols -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon"><span class="material-symbols-outlined">notifications_active</span>
+                        </div>
+                        <h3 class="section-title">Notification Protocols</h3>
+                    </div>
+                    <div class="settings-card">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Email Summaries</h4>
+                                <p>Receive daily briefings of research activities.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Debate Update Alerts</h4>
+                                <p>Instant push notifications for simulation milestones.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>System Health Alerts</h4>
+                                <p>Critical notifications regarding AI node performance.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appearance -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon"><span class="material-symbols-outlined">palette</span></div>
+                        <h3 class="section-title">Appearance</h3>
+                    </div>
+                    <!-- Appearance options would go here, matching visual style -->
+                    <div class="flex gap-4">
+                        <div class="card"
+                            style="flex: 1; border: 2px solid var(--ocean); cursor: pointer; text-align: center; background: rgba(255,255,255,0.5);">
+                            <div
+                                style="height: 120px; background: var(--sand-100); border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid var(--slate-100);">
+                            </div>
+                            <p style="font-weight: 700; font-size: 0.875rem;">Beach Theme</p>
+                        </div>
+                        <div class="card" style="flex: 1; opacity: 0.6; cursor: pointer; text-align: center;">
+                            <div
+                                style="height: 120px; background: var(--bg-dark); border-radius: 0.5rem; margin-bottom: 1rem;">
+                            </div>
+                            <p style="font-weight: 700; font-size: 0.875rem;">Dark Mode</p>
+                        </div>
+                        <div class="card" style="flex: 1; opacity: 0.6; cursor: pointer; text-align: center;">
+                            <div
+                                style="height: 120px; background: #fff; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid var(--slate-100);">
+                            </div>
+                            <p style="font-weight: 700; font-size: 0.875rem;">High Contrast</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="height: 100px;"></div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+</body>
+
+</html>

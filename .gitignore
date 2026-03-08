@@ -1,0 +1,34 @@
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Node
+node_modules/
+.next/
+out/
+build/
+dist/
+.env*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker
+.docker/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*.DS_Store
+
+# Logs
+logs/
+*.log
+backend/service-account.json
+node_modules
+.env

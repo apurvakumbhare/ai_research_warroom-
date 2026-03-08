@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Debate | AI Research War-Room</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        .agent-avatar-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .status-bar {
+            height: 6px;
+            background: var(--slate-100);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .status-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light">
+    <!-- Header -->
+    <header class="h-16 flex items-center justify-between px-6 border-b z-50 bg-white/80 backdrop-blur-md sticky top-0">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-3">
+                <div class="message-avatar"
+                    style="background: var(--primary); color: var(--driftwood); width: 32px; height: 32px;">
+                    <span class="material-symbols-outlined">waves</span>
+                </div>
+                <h2 style="font-size: 1rem; font-weight: 700; color: var(--slate-900);">AI Research War-Room</h2>
+            </div>
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="dashboard.html"
+                    class="text-sm font-medium text-slate-500 hover:text-primary transition-colors">Workspace</a>
+                <a href="reports.html"
+                    class="text-sm font-medium text-slate-500 hover:text-primary transition-colors">Archive</a>
+                <a href="settings_beach.html"
+                    class="text-sm font-medium text-slate-500 hover:text-primary transition-colors">Settings</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="debate-layout">
+        <!-- Left Panel: Project Intel -->
+        <aside class="left-panel flex-col p-6 bg-white border-r">
+            <div class="mb-6 p-4"
+                style="background: rgba(244, 237, 228, 0.4); border-radius: 1rem; border: 1px solid var(--sand-200);">
+                <h3
+                    style="font-size: 0.875rem; font-weight: 800; color: var(--driftwood); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">folder_open</span> Project Intel
+                </h3>
+                <p style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+                    Context: AGI Safety</p>
+            </div>
+
+            <div id="project-intel-list" class="space-y-4 overflow-y-auto">
+                <div class="p-3 card" style="border-radius: 0.75rem;">
+                    <div class="flex justify-between mb-1">
+                        <span class="badge badge-blue" style="font-size: 10px;">PAPER</span>
+                        <span style="font-size: 10px; color: var(--slate-400);">2h ago</span>
+                    </div>
+                    <h4 style="font-size: 0.875rem; font-weight: 700;">Scaling Laws for Neural Models</h4>
+                    <p
+                        style="font-size: 0.75rem; color: var(--slate-500); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                        Predictable benchmarks for model performance.</p>
+                </div>
+                <div class="p-3 card" style="border-radius: 0.75rem;">
+                    <div class="flex justify-between mb-1">
+                        <span class="badge"
+                            style="background: var(--sand-200); color: var(--driftwood); font-size: 10px;">DATASET</span>
+                        <span style="font-size: 10px; color: var(--slate-400);">Yesterday</span>
+                    </div>
+                    <h4 style="font-size: 0.875rem; font-weight: 700;">Human-in-the-loop Metrics</h4>
+                    <p style="font-size: 0.75rem; color: var(--slate-500);">Expert preference feedback nodes.</p>
+                </div>
+            </div>
+
+            <button id="upload-intel-btn"
+                style="width: 100%; margin-top: auto; padding: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; border: 1px solid #dcd1c6; border-radius: 12px; background: transparent; color: #012a4a; font-weight: 700; cursor: pointer; transition: background-color 0.2s;"
+                onmouseover="this.style.backgroundColor='#f8f6f4'"
+                onmouseout="this.style.backgroundColor='transparent'">
+                <span class="material-symbols-outlined" style="font-size: 20px;">add_circle</span> Upload Intel
+            </button>
+            <input type="file" id="intel-file-input" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.txt"
+                style="display: none;">
+        </aside>
+
+        <!-- Center Panel: Timeline -->
+        <section class="flex flex-col overflow-hidden" style="background: var(--slate-50);">
+            <header class="p-4 bg-white border-b flex justify-between items-center">
+                <div>
+                    <h2 style="font-size: 1.125rem; font-weight: 800;">Live Debate: Session Alpha</h2>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="pulse"></span>
+                        <span style="font-size: 12px; color: var(--slate-500);">Topic: Interpretability vs.
+                            Efficiency</span>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="pause-btn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">PAUSE</button>
+                    <button class="btn btn-primary" style="padding: 0.5rem 1rem;"
+                        onclick="window.location.href='report_view.html'">FINISH & REPORT</button>
+                </div>
+            </header>
+
+            <!-- Debate Timeline -->
+            <div class="flex-1 overflow-y-auto p-6" id="debate-timeline">
+                <div class="timeline" id="timeline-container">
+                    <!-- Messages will be injected here -->
+                </div>
+            </div>
+
+            <!-- Input area -->
+            <div class="p-4 bg-white border-t flex items-center justify-center">
+                <div class="flex items-center gap-3 w-full max-w-3xl">
+                    <span style="font-size: 24px;">🤖</span>
+                    <input id="inject-input" class="flex-1 border border-slate-400 px-3 py-1.5 text-sm outline-none"
+                        style="color: #1e293b;" placeholder="Inject instruction or a query" type="text">
+                    <button id="inject-btn"
+                        style="background-color: #abc9e3; border-radius: 16px; padding: 0.5rem 1.5rem; font-weight: 700; color: #0f172a; border: none; cursor: pointer; transition: background-color 0.2s;"
+                        onmouseover="this.style.backgroundColor='#9bbdd9'"
+                        onmouseout="this.style.backgroundColor='#abc9e3'">INJECT</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Panel: Agent Status -->
+        <aside class="right-panel flex-col p-6 bg-white border-l">
+            <h3 style="font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 18px;">memory</span> Agent Status
+            </h3>
+
+            <div class="space-y-6" id="agent-status-list">
+                <!-- Agent 1 -->
+                <div class="flex gap-4">
+                    <div class="relative">
+                        <div class="message-avatar" style="background: var(--ocean); width: 44px; height: 44px;">R</div>
+                        <div class="absolute"
+                            style="bottom: 0; right: 0; width: 10px; height: 10px; background: #22c55e; border: 2px solid #fff; border-radius: 50%;">
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <span style="font-size: 0.875rem; font-weight: 700;">Researcher</span>
+                            <span style="font-size: 9px; color: #22c55e; font-weight: 800;">ACTIVE</span>
+                        </div>
+                        <div class="status-bar">
+                            <div class="status-bar-fill" style="width: 85%;"></div>
+                        </div>
+                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">
+                            Searching ArXiv...</p>
+                    </div>
+                </div>
+
+                <!-- Agent 2 -->
+                <div class="flex gap-4">
+                    <div class="relative">
+                        <div class="message-avatar" style="background: var(--driftwood); width: 44px; height: 44px;">C
+                        </div>
+                        <div class="absolute"
+                            style="bottom: 0; right: 0; width: 10px; height: 10px; background: #22c55e; border: 2px solid #fff; border-radius: 50%;">
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <span style="font-size: 0.875rem; font-weight: 700;">Critic</span>
+                            <span style="font-size: 9px; color: #f59e0b; font-weight: 800;">THINKING</span>
+                        </div>
+                        <div class="status-bar">
+                            <div class="status-bar-fill" style="width: 40%; background: var(--driftwood);"></div>
+                        </div>
+                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">
+                            Analyzing logic...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-auto p-4" style="background: var(--sand-100); border-radius: 1rem; color: var(--driftwood);">
+                <h4 style="font-size: 10px; font-weight: 800; text-transform: uppercase;">Workspace Health</h4>
+                <div class="flex justify-between text-xs mt-2">
+                    <span>Tokens/Sec</span>
+                    <span style="font-weight: 700;">2.4k</span>
+                </div>
+                <div class="flex justify-between text-xs mt-1">
+                    <span>Consensus</span>
+                    <span style="font-weight: 700;">42%</span>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/debate.js"></script>
+</body>
+
+</html>

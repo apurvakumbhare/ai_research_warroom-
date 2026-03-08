@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2d5a27", // Forest green accent for primary actions
+                        "background-light": "#fdf8f3", // Warm beach sand/paper color
+                        "background-dark": "#13191f",
+                        "accent-warm": "#f3e5ab", // Sandy beach tone
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "heading": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex items-center justify-between bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-3 md:px-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">shield_with_heart</span>
+</div>
+<h2 class="font-heading text-lg font-bold leading-tight tracking-tight text-primary">AI Research War-Room</h2>
+</div>
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Projects</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">settings</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full border-2 border-primary overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="Portrait of Dr. Alistair Vance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAkgdOmQ_BEgGSakQJrsPeBVin4Km1HAR2YblHQRwKEqODBeTOTdcvomeKW52DjyTgL8yu75A0-O5d18DTX2a66INKpviEj6xor87la57Hu6n1xjjaw12GM5pJkn7EpnPh-hm-KAU0uscPjmhgLlOVbraKpqs4UBt-lmjP6_xgVX-_yYMJHCKl1pUovkNmvlPw9_JfGvQzDYcrWxX2gKTt7hHRYQj6LnurVJ2BZojplg4h0VmFi9OSTLgcbBF8m60LkTHzFwnhNZE"/>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column (33%) -->
+<aside class="lg:col-span-4 space-y-6">
+<!-- Avatar Card -->
+<div class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-slate-800 rounded-xl p-8 shadow-sm text-center">
+<div class="relative inline-block mb-6">
+<div class="size-32 rounded-full ring-4 ring-primary/20 p-1">
+<img class="size-full rounded-full object-cover shadow-lg" data-alt="Close up of Alistair Vance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_7PJwqZRDz_dkrCTrUN5dIBDTi2iwp6aSJKOc8W8EBj2NCrlRCrZGQgT5k_8EECx-pSMsOTgxOJUrKTiekiYuehUDtxxFY5b0uJrAZ7awHHE6jH6KZH_tq_fK3biwkYbYdteJXHcR7vw0rNDyda6M_g-C2Xl2dpQ0KTYAPkHZvDem_dT7kYxj_NisO1c3XZLBhC5hy1UJgkRbR6wdAZlMTZbnv6Puw819R54iht8jhD4__GFmx-A2eAAissLSbPiDG1sUSVBee04"/>
+</div>
+<span class="absolute bottom-1 right-2 size-6 bg-green-500 border-4 border-white dark:border-slate-900 rounded-full"></span>
+</div>
+<h1 class="font-heading text-2xl font-bold text-slate-900 dark:text-white">Dr. Alistair Vance</h1>
+<p class="text-primary font-semibold text-sm uppercase tracking-wider mt-1">Commander / Lead Researcher</p>
+<p class="mt-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            Strategic lead for high-stakes AI safety and adversarial research operations. Specialist in neural alignment and red-teaming.
+                        </p>
+</div>
+<!-- Stats Cards Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/40 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<span class="material-symbols-outlined text-primary mb-2">folder_managed</span>
+<div class="text-2xl font-bold font-heading">14</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-tighter">Projects Created</div>
+</div>
+<div class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/40 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<span class="material-symbols-outlined text-primary mb-2">forum</span>
+<div class="text-2xl font-bold font-heading">42</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-tighter">Debates Run</div>
+</div>
+<div class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/40 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<span class="material-symbols-outlined text-primary mb-2">description</span>
+<div class="text-2xl font-bold font-heading">38</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-tighter">Reports Generated</div>
+</div>
+<div class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/40 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<span class="material-symbols-outlined text-primary mb-2">analytics</span>
+<div class="text-2xl font-bold font-heading">88%</div>
+<div class="text-xs font-medium text-slate-500 uppercase tracking-tighter">Avg. Confidence</div>
+</div>
+</div>
+</aside>
+<!-- Right Column (66%) -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Profile Info Form -->
+<div class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-slate-800 rounded-xl p-8 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-heading text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person_edit</span>
+                                Profile Information
+                            </h2>
+<button class="text-primary font-semibold text-sm hover:underline">Edit All Fields</button>
+</div>
+<div class="space-y-10">
+<!-- Basic Info -->
+<section>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6 border-b border-slate-100 dark:border-slate-800 pb-2">Basic Info</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Full Name</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">Alistair Vance</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Username</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">@commander_vance</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Email</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">vance.a@warroom.research.org</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Phone</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">+1 (555) 012-3456</div>
+</div>
+</div>
+</section>
+<!-- Professional Info -->
+<section>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6 border-b border-slate-100 dark:border-slate-800 pb-2">Professional Info</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Occupation</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">Lead Safety Researcher</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Organization</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">Global AI Coalition</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Field of Research</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">Adversarial ML &amp; Alignment</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Industry</label>
+<div class="p-3 bg-background-light dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">Defense &amp; Technology</div>
+</div>
+</div>
+</section>
+<!-- Account Info -->
+<section>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6 border-b border-slate-100 dark:border-slate-800 pb-2">Account Info</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Joined Date</label>
+<div class="text-slate-900 dark:text-slate-100 font-semibold p-1">Oct 12, 2023</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Last Login</label>
+<div class="text-slate-900 dark:text-slate-100 font-semibold p-1">2h ago (14:32 GMT)</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-slate-500 ml-1">Status</label>
+<div class="flex items-center gap-2 p-1">
+<span class="size-2 bg-green-500 rounded-full animate-pulse"></span>
+<span class="text-green-600 dark:text-green-400 font-bold text-sm uppercase">Active</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-slate-800 rounded-xl p-8 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-heading text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                                Recent Activity
+                            </h2>
+<button class="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">filter_list</span>
+</button>
+</div>
+<div class="space-y-4">
+<!-- Activity Item -->
+<div class="flex items-center justify-between p-4 rounded-xl hover:bg-white/40 dark:hover:bg-slate-800/40 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">shield_moon</span>
+</div>
+<div>
+<h4 class="font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Project Aegis Response</h4>
+<p class="text-xs text-slate-500">Adversarial Simulation Phase 4</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="text-xs font-medium text-slate-400">2h ago</span>
+<span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold uppercase rounded-full tracking-wider">Completed</span>
+</div>
+</div>
+<!-- Activity Item -->
+<div class="flex items-center justify-between p-4 rounded-xl hover:bg-white/40 dark:hover:bg-slate-800/40 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">psychology_alt</span>
+</div>
+<div>
+<h4 class="font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Debate: Ethics of Synthetic Autonomy</h4>
+<p class="text-xs text-slate-500">Moderator Role Assigned</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="text-xs font-medium text-slate-400">5h ago</span>
+<span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-[10px] font-bold uppercase rounded-full tracking-wider">In Progress</span>
+</div>
+</div>
+<!-- Activity Item -->
+<div class="flex items-center justify-between p-4 rounded-xl hover:bg-white/40 dark:hover:bg-slate-800/40 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">lab_research</span>
+</div>
+<div>
+<h4 class="font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">System Vulnerability Scan #882</h4>
+<p class="text-xs text-slate-500">Internal Audit - Central Node</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="text-xs font-medium text-slate-400">Yesterday</span>
+<span class="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[10px] font-bold uppercase rounded-full tracking-wider">Pending Review</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary transition-all text-sm font-medium">
+                            Load Older Activity
+                        </button>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-8 px-10 text-center text-slate-400 text-xs">
+<p>© 2024 AI Research War-Room. Classified Strategic Document. Authorized Personnel Only.</p>
+</footer>
+</div>
+</body></html>

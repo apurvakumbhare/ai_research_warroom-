@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | AI Research War-Room</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .chart-bar {
+            width: 100%;
+            background: var(--primary-light);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease, background 0.3s ease;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            background: var(--primary);
+        }
+
+        .chart-bar::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--slate-400);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="p-6 flex items-center gap-3">
+                <div class="message-avatar"
+                    style="background: var(--primary); color: var(--slate-900); width: 32px; height: 32px;">
+                    <span class="material-symbols-outlined">shield</span>
+                </div>
+                <h2 style="font-size: 1.125rem; font-weight: 700; color: var(--driftwood);">AI War-Room</h2>
+            </div>
+
+            <nav class="flex-col gap-1 p-4">
+                <p
+                    style="font-size: 0.625rem; font-weight: 800; text-transform: uppercase; color: var(--slate-400); padding: 0.5rem 1rem;">
+                    Strategic Command</p>
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3"
+                    style="background: var(--primary); color: var(--slate-900); border-radius: 0.75rem; font-weight: 600;">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="my_upload.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">account_tree</span>
+                    Projects
+                </a>
+                <a href="debate.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">forum</span>
+                    Active Debates
+                </a>
+                <a href="reports.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">description</span>
+                    Reports
+                </a>
+            </nav>
+
+            <div class="mt-auto p-4">
+                <div class="p-4" style="background: var(--driftwood); color: #fff; border-radius: 1rem;">
+                    <p style="font-size: 0.625rem; opacity: 0.7; margin-bottom: 0.25rem;">System Status</p>
+                    <p style="font-size: 0.875rem; font-weight: 700; display: flex; items-center: center; gap: 0.5rem;">
+                        <span class="pulse" style="background: #4ade80;"></span>
+                        All Engines Nominal
+                    </p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main p-8">
+            <header class="flex justify-between items-center mb-8">
+                <div>
+                    <h1
+                        style="font-size: 1.875rem; font-weight: 800; color: var(--driftwood); letter-spacing: -0.025em;">
+                        Intelligence Overview</h1>
+                    <p style="color: var(--slate-500);">Live feed from strategic research initiatives.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="notificationsBtn" class="glass-card flex items-center justify-center"
+                        style="width: 40px; height: 40px; border-radius: 50%;" aria-label="Notifications">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div class="dropdown-container">
+                        <button id="userAvatarBtn" class="focus:outline-none" aria-haspopup="true" aria-expanded="false"
+                            aria-label="User menu"
+                            style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); background: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCp1y_qU4qkGcLS9cJKwwm_eR2N1Kbu4r6g3QW4_tjuqr3RXMUqkb6qIPW_wTTi6kC6GKIPfX9WAMzSg1X4dBCml7EddRTNZFzOhyO3PoXZeYMGG5FhK15BVLhO01MBNwAALCiF2m1cufRWaTQntRC6U6lCme7CwA20bDvSyBd8v8fpD3ZEpkrZGnA39BSJC70mVfL3nzA90YcVz9d6aL-PscupO1PHd_9E5zKFhVtYxgIvh0Ivpz9PgZHeQRaiLKogwSWJVZmded4') center/cover; cursor: pointer; display: block; padding: 0;">
+                        </button>
+                        <div id="userDropdown" class="dropdown-menu" role="menu">
+                            <button class="dropdown-item" role="menuitem" data-path="profile.html">
+                                <span class="material-symbols-outlined">person</span>
+                                Profile
+                            </button>
+                            <button class="dropdown-item" role="menuitem" data-path="my_upload.html">
+                                <span class="material-symbols-outlined">folder_special</span>
+                                My Projects
+                            </button>
+                            <button class="dropdown-item" role="menuitem" data-path="settings_beach.html">
+                                <span class="material-symbols-outlined">settings</span>
+                                Settings
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" role="menuitem" data-path="signin.html"
+                                style="color: var(--red-500);">
+                                <span class="material-symbols-outlined" style="color: var(--red-500);">logout</span>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="grid lg-grid-cols-4 gap-6 mb-8">
+                <div class="card flex flex-col">
+                    <div class="flex justify-between mb-4">
+                        <span class="material-symbols-outlined"
+                            style="color: var(--primary); font-size: 2rem;">folder_open</span>
+                        <span class="badge badge-green">+12%</span>
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--slate-500); font-weight: 500;">Total Projects</p>
+                    <p style="font-size: 1.875rem; font-weight: 700; color: var(--slate-900);">128</p>
+                </div>
+                <div class="card flex flex-col">
+                    <div class="flex justify-between mb-4">
+                        <span class="material-symbols-outlined"
+                            style="color: var(--primary); font-size: 2rem;">psychology</span>
+                        <span class="badge badge-green">+5%</span>
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--slate-500); font-weight: 500;">Active Debates</p>
+                    <p style="font-size: 1.875rem; font-weight: 700; color: var(--slate-900);">14</p>
+                </div>
+                <div class="card flex flex-col">
+                    <div class="flex justify-between mb-4">
+                        <span class="material-symbols-outlined"
+                            style="color: var(--primary); font-size: 2rem;">task_alt</span>
+                        <span class="badge" style="background: #fee2e2; color: #b91c1c;">-2%</span>
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--slate-500); font-weight: 500;">Completed Reports</p>
+                    <p style="font-size: 1.875rem; font-weight: 700; color: var(--slate-900);">84</p>
+                </div>
+                <div class="card flex flex-col">
+                    <div class="flex justify-between mb-4">
+                        <span class="material-symbols-outlined"
+                            style="color: var(--primary); font-size: 2rem;">verified</span>
+                        <span class="badge badge-green">+3%</span>
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--slate-500); font-weight: 500;">Avg. Confidence</p>
+                    <p style="font-size: 1.875rem; font-weight: 700; color: var(--slate-900);">92%</p>
+                </div>
+            </div>
+
+            <div class="grid lg-grid-cols-3 gap-8">
+                <!-- Activity Chart -->
+                <div class="lg-grid-cols-2 lg-col-span-2 card">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 style="font-weight: 700;">Research Activity</h3>
+                        <div class="flex gap-2">
+                            <span class="badge badge-blue">Weekly</span>
+                            <span class="badge"
+                                style="background: var(--slate-100); color: var(--slate-500);">Monthly</span>
+                        </div>
+                    </div>
+                    <div class="flex items-end justify-between gap-4" style="height: 200px; padding: 0 10px;">
+                        <div class="chart-bar" style="height: 40%;" data-label="M"></div>
+                        <div class="chart-bar" style="height: 65%;" data-label="T"></div>
+                        <div class="chart-bar" style="height: 55%;" data-label="W"></div>
+                        <div class="chart-bar" style="height: 85%;" data-label="T"></div>
+                        <div class="chart-bar" style="height: 45%;" data-label="F"></div>
+                        <div class="chart-bar" style="height: 95%;" data-label="S"></div>
+                        <div class="chart-bar" style="height: 70%;" data-label="S"></div>
+                    </div>
+                </div>
+
+                <!-- Recent Projects -->
+                <div class="card">
+                    <h3 style="font-weight: 700; margin-bottom: 1.5rem;">Recent Projects</h3>
+                    <div id="projects-list" class="flex-col gap-4">
+                        <!-- visible by default: first 2 -->
+                        <div class="project-row flex items-center gap-4 p-3 hover:bg-slate-50 cursor-pointer"
+                            style="border-radius: 0.75rem;" onclick="window.location.href='debate.html'" tabindex="0"
+                            role="button" aria-label="Open Project Artemis">
+                            <div class="message-avatar"
+                                style="background: var(--primary-light); color: var(--primary-dark);">
+                                <span class="material-symbols-outlined">rocket_launch</span>
+                            </div>
+                            <div class="flex-1">
+                                <p style="font-size: 0.875rem; font-weight: 700;">Project Artemis</p>
+                                <p style="font-size: 0.75rem; color: var(--slate-400);">LLM Reasoning</p>
+                            </div>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--slate-300);">chevron_right</span>
+                        </div>
+                        <div class="project-row flex items-center gap-4 p-3 hover:bg-slate-50 cursor-pointer"
+                            style="border-radius: 0.75rem;" onclick="window.location.href='debate.html'" tabindex="0"
+                            role="button" aria-label="Open Synthetic Bio project">
+                            <div class="message-avatar"
+                                style="background: var(--primary-light); color: var(--primary-dark);">
+                                <span class="material-symbols-outlined">biotech</span>
+                            </div>
+                            <div class="flex-1">
+                                <p style="font-size: 0.875rem; font-weight: 700;">Synthetic Bio</p>
+                                <p style="font-size: 0.75rem; color: var(--slate-400);">Protein Folding</p>
+                            </div>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--slate-300);">chevron_right</span>
+                        </div>
+                        <!-- hidden extra projects (shown on View All) -->
+                        <div class="project-row project-extra flex items-center gap-4 p-3 hover:bg-slate-50 cursor-pointer"
+                            style="border-radius: 0.75rem; display: none;" onclick="window.location.href='debate.html'"
+                            tabindex="0" role="button" aria-label="Open Quantum Mesh project">
+                            <div class="message-avatar" style="background: var(--sand-200); color: var(--driftwood);">
+                                <span class="material-symbols-outlined">hub</span>
+                            </div>
+                            <div class="flex-1">
+                                <p style="font-size: 0.875rem; font-weight: 700;">Quantum Mesh</p>
+                                <p style="font-size: 0.75rem; color: var(--slate-400);">Cryptography</p>
+                            </div>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--slate-300);">chevron_right</span>
+                        </div>
+                        <div class="project-row project-extra flex items-center gap-4 p-3 hover:bg-slate-50 cursor-pointer"
+                            style="border-radius: 0.75rem; display: none;" onclick="window.location.href='debate.html'"
+                            tabindex="0" role="button" aria-label="Open Climate Sovereign project">
+                            <div class="message-avatar" style="background: var(--sand-200); color: var(--driftwood);">
+                                <span class="material-symbols-outlined">eco</span>
+                            </div>
+                            <div class="flex-1">
+                                <p style="font-size: 0.875rem; font-weight: 700;">Climate Sovereign</p>
+                                <p style="font-size: 0.75rem; color: var(--slate-400);">Carbon Modelling</p>
+                            </div>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--slate-300);">chevron_right</span>
+                        </div>
+                        <div class="project-row project-extra flex items-center gap-4 p-3 hover:bg-slate-50 cursor-pointer"
+                            style="border-radius: 0.75rem; display: none;" onclick="window.location.href='debate.html'"
+                            tabindex="0" role="button" aria-label="Open Neural Cartography project">
+                            <div class="message-avatar"
+                                style="background: var(--primary-light); color: var(--primary-dark);">
+                                <span class="material-symbols-outlined">share</span>
+                            </div>
+                            <div class="flex-1">
+                                <p style="font-size: 0.875rem; font-weight: 700;">Neural Cartography</p>
+                                <p style="font-size: 0.75rem; color: var(--slate-400);">Brain-Computer I/F</p>
+                            </div>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--slate-300);">chevron_right</span>
+                        </div>
+                    </div>
+                    <button id="viewAllProjectsBtn" class="w-full mt-6 btn btn-secondary" aria-expanded="false"
+                        aria-controls="projects-list">
+                        View All Projects
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome false
+skinparam packageStyle rect
+skinparam defaultFontName "Inter"
+
+actor Client
+participant "Backend API" as Backend
+database PostgreSQL
+database Redis
+participant "OpenAI API" as OpenAI
+
+Client -> Backend : POST /api/projects\n(ProjectRequest)
+activate Backend
+
+Backend -> PostgreSQL : Save Initial Project Entity
+PostgreSQL --> Backend : Persistent UUID
+
+Backend -> Redis : Initialize Session Memory\n(warroom:memory:{id})
+
+Backend -> OpenAI : Execute ResearcherAgent Prompt
+activate OpenAI
+OpenAI --> Backend : JSON (Strengths/Opportunities)
+deactivate OpenAI
+Backend -> Redis : Append context to Context List
+Backend -> PostgreSQL : Save Agent Output
+
+Backend -> OpenAI : Execute CriticAgent Prompt\n(including context)
+activate OpenAI
+OpenAI --> Backend : JSON (Weaknesses/Risks)
+deactivate OpenAI
+Backend -> Redis : Append context
+Backend -> PostgreSQL : Save Agent Output
+
+Backend -> PostgreSQL : Update Project Status\n(Synthesized Output)
+Backend --> Client : 201 Created (ProjectResponse)
+deactivate Backend
+
+@enduml

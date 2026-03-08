@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Research War-Room | Collaborative Intelligence</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(167, 199, 231, 0.2), transparent),
+                radial-gradient(circle at bottom left, rgba(211, 185, 163, 0.15), transparent);
+        }
+
+        .hero-bg-blobs .blob {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.2;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="hero-gradient">
+    <div class="relative min-h-screen overflow-x-hidden">
+        <!-- Navigation -->
+        <header class="sticky top-0 z-50 px-6 py-4">
+            <nav class="container glass-card flex items-center justify-between px-6 py-3 shadow-sm"
+                style="border-radius: 1rem; background: rgba(255,255,255,0.7);">
+                <div class="flex items-center gap-3">
+                    <div class="message-avatar"
+                        style="background: var(--primary-light); color: var(--slate-800); width: 36px; height: 36px;">
+                        <span class="material-symbols-outlined">shield_with_heart</span>
+                    </div>
+                    <h2 class="text-slate-900 font-bold text-xl tracking-tight">AI War-Room</h2>
+                </div>
+                <div class="hidden md:flex items-center gap-10">
+                    <a class="text-slate-600 hover:text-primary transition-colors text-sm font-medium"
+                        href="#features">Features</a>
+                    <a class="text-slate-600 hover:text-primary transition-colors text-sm font-medium"
+                        href="#">Methodology</a>
+                    <a class="text-slate-600 hover:text-primary transition-colors text-sm font-medium"
+                        href="#">Pricing</a>
+                </div>
+
+            </nav>
+        </header>
+
+        <main class="container py-12">
+            <!-- Hero Section -->
+            <div class="grid lg-grid-cols-2 gap-12 items-center mb-16">
+                <div class="space-y-8">
+                    <div class="badge badge-sand inline-flex items-center gap-2">
+                        <span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+                        Next-Gen Research Synthesis
+                    </div>
+                    <div class="space-y-4">
+                        <h1 style="font-size: 3.5rem; font-weight: 800; line-height: 1.1; color: var(--slate-900);">
+                            AI Agents That <span style="color: var(--ocean);">Debate</span> Your Ideas
+                        </h1>
+                        <p style="font-size: 1.125rem; color: var(--slate-600); max-width: 500px;">
+                            Professional AI-powered analysis for complex research missions. Experience the power of
+                            collaborative machine intelligence with a human touch.
+                        </p>
+                    </div>
+                    <!-- CTA -->
+                    <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+                        <a href="signin.html" class="btn btn-primary btn-lg"
+                            style="background: var(--driftwood); color: #fff; text-decoration: none;"
+                            aria-label="Log in to AI Research War-Room">
+                            <span class="material-symbols-outlined">login</span>
+                            Log In
+                        </a>
+                        <p style="font-size: 0.875rem; color: var(--slate-500);">
+                            New to War-Room?
+                            <a href="signin.html#register"
+                                style="color: var(--ocean); font-weight: 700; text-decoration: none;"
+                                aria-label="Create a new account">
+                                Create an account →
+                            </a>
+                        </p>
+                    </div>
+                </div><!-- /.space-y-8 (left hero column) -->
+
+                <!-- Right: Visualization card -->
+                <div class="relative">
+                    <div
+                        class="glass-card p-4 shadow-2xl overflow-hidden aspect-square flex items-center justify-center">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9dQ4RkUgjYoKgDN3tknzBPxyneT6gPRwkbWQOO9wcqfGnHfZ93ucqtJBUQ7YFKbqSjg8K9BWXuZtCi-rJADI0jU5q2PMnZ0qpRFIofB0znlOiyjk_X7P6LvO0AFt4X2zZVhoY1OCXoO3n2-PXXh-DgqopYLNe8ToF5cxPYsIC1-7KaAGset_UWF7HOFiPin6Nb8R35f8-Bmnw7ZwptINijEfHJUSUgo9x7g_HYYQVmIyZk-dR1KR22B0Uxk6moYsKXUmo4mXUo2Q"
+                            alt="AI Debate Visualization"
+                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 1rem;">
+                        <div class="absolute glass-card p-4 shadow-lg border"
+                            style="bottom: 2rem; right: 2rem; max-width: 220px; background: rgba(255,255,255,0.8);">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="pulse"></div>
+                                <span
+                                    style="font-size: 10px; font-weight: 800; color: var(--slate-500); text-transform: uppercase;">Live
+                                    Analysis</span>
+                            </div>
+                            <p style="font-size: 12px; font-weight: 600; color: var(--slate-800);">Agent Alpha: "The
+                                data suggests a 15% increase in efficiency..."</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.hero grid -->
+
+            <!-- Features Section -->
+            <section id="features" class="py-20">
+                <div style="text-align: center; max-width: 700px; margin: 0 auto 4rem auto;">
+                    <h2 style="font-size: 2.5rem; font-weight: 800; color: var(--slate-900); margin-bottom: 1rem;">
+                        The
+                        War-Room Advantage</h2>
+                    <p style="color: var(--slate-600);">Our multi-agent system provides deep insights through
+                        adversarial analysis and collaborative synthesis.</p>
+                </div>
+                <div class="grid md-grid-cols-3 gap-8">
+                    <div class="glass-card p-8 group">
+                        <div class="message-avatar"
+                            style="background: var(--primary-light); color: var(--slate-800); width: 56px; height: 56px; margin-bottom: 1.5rem;">
+                            <span class="material-symbols-outlined" style="font-size: 32px;">forum</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Multi-Agent Debate
+                        </h3>
+                        <p style="color: var(--slate-600); font-size: 0.875rem;">Multiple AI personas challenge your
+                            hypotheses to find the unvarnished truth.</p>
+                    </div>
+                    <div class="glass-card p-8 group">
+                        <div class="message-avatar"
+                            style="background: var(--sand-200); color: var(--slate-800); width: 56px; height: 56px; margin-bottom: 1.5rem;">
+                            <span class="material-symbols-outlined" style="font-size: 32px;">analytics</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Research Analysis
+                        </h3>
+                        <p style="color: var(--slate-600); font-size: 0.875rem;">Deep dive into complex datasets
+                            with
+                            automated literature reviews.</p>
+                    </div>
+                    <div class="glass-card p-8 group">
+                        <div class="message-avatar"
+                            style="background: var(--primary-light); color: var(--slate-800); width: 56px; height: 56px; margin-bottom: 1.5rem;">
+                            <span class="material-symbols-outlined" style="font-size: 32px;">security_update_good</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Risk & Confidence
+                        </h3>
+                        <p style="color: var(--slate-600); font-size: 0.875rem;">Quantifiable metrics for
+                            uncertainty
+                            and strategic risk assessment.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="container py-12" style="border-top: 1px solid var(--sand-200);">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="flex items-center gap-3">
+                    <div class="message-avatar" style="background: var(--primary-light); width: 32px; height: 32px;">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">shield_with_heart</span>
+                    </div>
+                    <span style="font-weight: 700; color: var(--slate-900);">AI War-Room</span>
+                </div>
+                <div class="flex gap-8 text-sm color: var(--slate-500);">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Contact</a>
+                </div>
+                <p style="font-size: 12px; color: var(--slate-400);">© 2024 AI Research War-Room. All rights reserved.
+                </p>
+            </div>
+        </footer>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/pdf-upload.js"></script>
+</body>
+
+</html>

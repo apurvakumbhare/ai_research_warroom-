@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports Archive | AI Research War-Room</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <header
+            class="h-16 flex items-center justify-between px-6 border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div class="message-avatar" style="background: var(--primary); color: #fff; width: 32px; height: 32px;">
+                    <span class="material-symbols-outlined">analytics</span>
+                </div>
+                <h2 style="font-size: 1rem; font-weight: 700;">AI War-Room</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="btn btn-primary" onclick="window.location.href='my_upload.html'">New Project</button>
+            </div>
+        </header>
+
+        <main class="dashboard-main p-8">
+            <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 2rem;">Research Reports</h1>
+
+            <div class="grid gap-6">
+                <!-- Example Report -->
+                <div class="card flex justify-between items-center p-6 hover:border-primary cursor-pointer"
+                    onclick="window.location.href='report_view.html'">
+                    <div class="flex items-center gap-4">
+                        <div class="message-avatar" style="background: var(--primary-light); color: var(--primary);">
+                            <span class="material-symbols-outlined">description</span>
+                        </div>
+                        <div>
+                            <h3 style="font-weight: 700;">Project Alpha-Zeta: Multi-modal Integration</h3>
+                            <p style="font-size: 0.875rem; color: var(--slate-500);">Generated on Oct 12, 2023 •
+                                Confidence: 85%</p>
+                        </div>
+                    </div>
+                    <span class="badge badge-green">COMPLETED</span>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/navigation.js"></script>
+</body>
+
+</html>

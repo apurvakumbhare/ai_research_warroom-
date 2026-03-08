@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | AI Research War-Room</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .profile-avatar-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            border: 4px solid var(--primary);
+            padding: 4px;
+            background: #fff;
+            position: relative;
+        }
+
+        .avatar-large img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .status-badge-online {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 16px;
+            height: 16px;
+            background: #22c55e;
+            border: 3px solid #fff;
+            border-radius: 50%;
+        }
+
+        .profile-info-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header-small {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--slate-400);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--slate-100);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--slate-500);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--slate-900);
+            background: rgba(255, 255, 255, 0.5);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--slate-100);
+        }
+
+        .activity-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem;
+            background: #fff;
+            border: 1px solid var(--slate-50);
+            border-radius: var(--radius-lg);
+            transition: all 0.2s ease;
+        }
+
+        .activity-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="p-6 flex items-center gap-3">
+                <div class="message-avatar" style="background: var(--primary); color: #fff; width: 32px; height: 32px;">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">shield</span>
+                </div>
+                <div>
+                    <h2 style="font-size: 0.9375rem; font-weight: 800; color: var(--slate-900); line-height: 1;">
+                        War-Room</h2>
+                    <p
+                        style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.05em;">
+                        Strategic Ops</p>
+                </div>
+            </div>
+
+            <nav class="flex-col gap-1 p-4">
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="my_upload.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">account_tree</span>
+                    Projects
+                </a>
+                <a href="debate.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">forum</span>
+                    Debate Room
+                </a>
+                <a href="reports.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">description</span>
+                    Reports
+                </a>
+                <a href="settings_beach.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main p-8">
+            <header class="flex justify-between items-center mb-10">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined" style="color: var(--primary);">person</span>
+                    <h1 style="font-size: 1.125rem; font-weight: 700; color: var(--slate-900);">Researcher Profile</h1>
+                </div>
+            </header>
+
+            <div class="profile-layout">
+                <!-- Profile Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="profile-avatar-card">
+                        <div class="avatar-large">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_7PJwqZRDz_dkrCTrUN5dIBDTi2iwp6aSJKOc8W8EBj2NCrlRCrZGQgT5k_8EECx-pSMsOTgxOJUrKTiekiYuehUDtxxFY5b0uJrAZ7awHHE6jH6KZH_tq_fK3biwkYbYdteJXHcR7vw0rNDyda6M_g-C2Xl2dpQ0KTYAPkHZvDem_dT7kYxj_NisO1c3XZLBhC5hy1UJgkRbR6wdAZlMTZbnv6Puw819R54iht8jhD4__GFmx-A2eAAissLSbPiDG1sUSVBee04"
+                                alt="Dr. Vance">
+                            <div class="status-badge-online"></div>
+                        </div>
+                        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--slate-900);">Dr. Alistair Vance
+                        </h2>
+                        <p
+                            style="color: var(--primary); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; margin: 0.5rem 0 1rem;">
+                            Commander / Lead Researcher</p>
+                        <p style="font-size: 0.875rem; color: var(--slate-500); line-height: 1.6;">Strategic lead for
+                            high-stakes AI safety and adversarial research operations.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="card p-4 text-center">
+                            <h3 style="font-size: 1.25rem; font-weight: 800;">14</h3>
+                            <p
+                                style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+                                Projects</p>
+                        </div>
+                        <div class="card p-4 text-center">
+                            <h3 style="font-size: 1.25rem; font-weight: 800;">42</h3>
+                            <p
+                                style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+                                Debates</p>
+                        </div>
+                        <div class="card p-4 text-center">
+                            <h3 style="font-size: 1.25rem; font-weight: 800;">38</h3>
+                            <p
+                                style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+                                Reports</p>
+                        </div>
+                        <div class="card p-4 text-center">
+                            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary-dark);">88%</h3>
+                            <p
+                                style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+                                Confidence</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Main Content -->
+                <div class="card" style="padding: 2.5rem;">
+                    <div class="profile-info-section">
+                        <header class="section-header-small">Basic Information</header>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Full Name</label>
+                                <div class="info-value">Alistair Vance</div>
+                            </div>
+                            <div class="info-item">
+                                <label>Username</label>
+                                <div class="info-value">@commander_vance</div>
+                            </div>
+                            <div class="info-item">
+                                <label>Email Address</label>
+                                <div class="info-value">vance.a@warroom.research.org</div>
+                            </div>
+                            <div class="info-item">
+                                <label>Research Focus</label>
+                                <div class="info-value">Adversarial ML & Alignment</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-section">
+                        <header class="section-header-small">Recent Activity</header>
+                        <div class="activity-feed">
+                            <div class="activity-item">
+                                <div class="flex items-center gap-4">
+                                    <div class="activity-icon">
+                                        <span class="material-symbols-outlined">shield_moon</span>
+                                    </div>
+                                    <div>
+                                        <h4 style="font-size: 0.875rem; font-weight: 700;">Project Aegis Response</h4>
+                                        <p style="font-size: 0.75rem; color: var(--slate-400);">Simulation Phase 4
+                                            Completed</p>
+                                    </div>
+                                </div>
+                                <span class="badge badge-green">Completed</span>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="flex items-center gap-4">
+                                    <div class="activity-icon"
+                                        style="background: rgba(30, 64, 175, 0.1); color: #1e40af;">
+                                        <span class="material-symbols-outlined">psychology_alt</span>
+                                    </div>
+                                    <div>
+                                        <h4 style="font-size: 0.875rem; font-weight: 700;">Ethics of Synthetic Autonomy
+                                        </h4>
+                                        <p style="font-size: 0.75rem; color: var(--slate-400);">Moderator Role Assigned
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="badge" style="background: #dbeafe; color: #1e40af;">Active</span>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="flex items-center gap-4">
+                                    <div class="activity-icon"
+                                        style="background: rgba(180, 83, 9, 0.1); color: #b45309;">
+                                        <span class="material-symbols-outlined">lab_research</span>
+                                    </div>
+                                    <div>
+                                        <h4 style="font-size: 0.875rem; font-weight: 700;">System Vulnerability Scan
+                                            #882</h4>
+                                        <p style="font-size: 0.75rem; color: var(--slate-400);">Internal Audit Pending
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="badge" style="background: #fef3c7; color: #b45309;">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary w-full"
+                        style="border-style: dashed; padding: 1rem; color: var(--slate-400);">
+                        Load Archived Activities
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/navigation.js"></script>
+</body>
+
+</html>

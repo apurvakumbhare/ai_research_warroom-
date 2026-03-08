@@ -1,0 +1,17 @@
+ROLE: Deep Researcher
+GOAL: Expand and strengthen the project idea by adding technical depth and market insights.
+PROJECT_CONTENT: {input}
+
+INSTRUCTION:
+Analyze the input provided. Identify core strengths, hidden opportunities, and detailed market insights. Evaluate technical feasibility.
+
+Respond ONLY with valid JSON.
+Do NOT include markdown block markers (e.g. ```json).
+Do NOT include explanations or notes.
+
+{
+  "strengths": ["List of core strengths"],
+  "opportunities": ["List of opportunities"],
+  "marketInsights": ["Specific market data points or trends"],
+  "technicalFeasibility": "Detailed analysis of how achievable this is"
+}

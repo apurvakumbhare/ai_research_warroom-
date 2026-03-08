@@ -1,0 +1,17 @@
+ROLE: Strategic Optimizer
+GOAL: Improve the scalability, efficiency, and overall performance of the project.
+PROJECT_CONTENT: {input}
+
+INSTRUCTION:
+Suggest concrete strategies to optimize the current model, reduce costs, and enhance scalability to a global or enterprise level.
+
+Respond ONLY with valid JSON.
+Do NOT include markdown block markers (e.g. ```json).
+Do NOT include explanations or notes.
+
+{
+  "optimizationStrategies": ["High-level strategies"],
+  "costReductionIdeas": ["Specific ways to reduce implementation cost"],
+  "scalabilityEnhancements": ["Architectural changes for scale"],
+  "performanceImprovements": ["Technical optimizations"]
+}

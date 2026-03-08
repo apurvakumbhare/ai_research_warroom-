@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Research War-Room Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4b996", // Warm Sand
+                        "secondary": "#5d4a3e", // Driftwood Brown
+                        "accent": "#fdfaf6", // Soft Cream
+                        "background-light": "#fcfaf7",
+                        "background-dark": "#1a1612",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-secondary dark:text-accent font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-primary/20 bg-accent/50 dark:bg-background-dark/50 backdrop-blur-md px-6 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="bg-primary p-2 rounded-lg text-secondary">
+<span class="material-symbols-outlined block">shield</span>
+</div>
+<h2 class="text-secondary dark:text-accent text-xl font-bold tracking-tight">AI Research War-Room</h2>
+</div>
+<div class="flex flex-1 justify-center max-w-xl px-8">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary/50">search</span>
+<input class="w-full bg-primary/10 border-none rounded-xl py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary text-secondary placeholder:text-secondary/40" placeholder="Search research nodes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-xl bg-primary/10 text-secondary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-xl bg-primary/10 text-secondary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-10 w-10 rounded-full border-2 border-primary bg-cover bg-center" data-alt="User profile avatar showing a professional researcher" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCp1y_qU4qkGcLS9cJKwwm_eR2N1Kbu4r6g3QW4_tjuqr3RXMUqkb6qIPW_wTTi6kC6GKIPfX9WAMzSg1X4dBCml7EddRTNZFzOhyO3PoXZeYMGG5FhK15BVLhO01MBNwAALCiF2m1cufRWaTQntRC6U6lCme7CwA20bDvSyBd8v8fpD3ZEpkrZGnA39BSJC70mVfL3nzA90YcVz9d6aL-PscupO1PHd_9E5zKFhVtYxgIvh0Ivpz9PgZHeQRaiLKogwSWJVZmded4')"></div>
+</div>
+</header>
+<div class="flex flex-1">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-primary/10 bg-accent/30 dark:bg-background-dark/30 p-4 hidden lg:flex flex-col gap-2">
+<div class="mb-6 px-2">
+<p class="text-xs font-bold uppercase tracking-widest text-secondary/40">Strategic Command</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-secondary font-semibold" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/10 text-secondary/70 hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+                        Projects
+                    </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/10 text-secondary/70 hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined">forum</span>
+                        Active Debates
+                    </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/10 text-secondary/70 hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined">description</span>
+                        Reports
+                    </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/10 text-secondary/70 hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined">archive</span>
+                        Archive
+                    </a>
+</nav>
+<div class="mt-auto p-4 rounded-2xl bg-secondary text-accent">
+<p class="text-xs opacity-70 mb-1">System Status</p>
+<p class="text-sm font-bold flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-green-400"></span>
+                        All Engines Nominal
+                    </p>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+<div class="max-w-6xl mx-auto">
+<div class="mb-8">
+<h1 class="text-3xl font-black text-secondary dark:text-accent tracking-tight">Intelligence Overview</h1>
+<p class="text-secondary/60">Live feed from strategic research initiatives and synthetic debates.</p>
+</div>
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div class="bg-accent border border-primary/20 p-6 rounded-2xl shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">folder_open</span>
+<span class="text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded-lg">+12%</span>
+</div>
+<p class="text-secondary/60 text-sm font-medium">Total Projects</p>
+<p class="text-3xl font-bold text-secondary mt-1">128</p>
+</div>
+<div class="bg-accent border border-primary/20 p-6 rounded-2xl shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">psychology</span>
+<span class="text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded-lg">+5%</span>
+</div>
+<p class="text-secondary/60 text-sm font-medium">Active Debates</p>
+<p class="text-3xl font-bold text-secondary mt-1">14</p>
+</div>
+<div class="bg-accent border border-primary/20 p-6 rounded-2xl shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">task_alt</span>
+<span class="text-red-600 text-sm font-bold bg-red-50 px-2 py-1 rounded-lg">-2%</span>
+</div>
+<p class="text-secondary/60 text-sm font-medium">Completed Reports</p>
+<p class="text-3xl font-bold text-secondary mt-1">84</p>
+</div>
+<div class="bg-accent border border-primary/20 p-6 rounded-2xl shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">verified</span>
+<span class="text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded-lg">+3%</span>
+</div>
+<p class="text-secondary/60 text-sm font-medium">Avg. Confidence</p>
+<p class="text-3xl font-bold text-secondary mt-1">92%</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Activity Chart Placeholder -->
+<div class="lg:col-span-2 bg-accent border border-primary/20 rounded-2xl p-6 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-bold text-secondary">Research Activity</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-primary/10 rounded-lg text-xs font-bold">Weekly</span>
+<span class="px-3 py-1 hover:bg-primary/10 rounded-lg text-xs font-bold transition-colors">Monthly</span>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-2 px-2">
+<!-- Simple CSS Chart Bars -->
+<div class="w-full bg-primary/20 rounded-t-lg h-[40%]" title="Mon"></div>
+<div class="w-full bg-primary/40 rounded-t-lg h-[65%]" title="Tue"></div>
+<div class="w-full bg-primary/30 rounded-t-lg h-[55%]" title="Wed"></div>
+<div class="w-full bg-primary/60 rounded-t-lg h-[85%]" title="Thu"></div>
+<div class="w-full bg-primary/40 rounded-t-lg h-[45%]" title="Fri"></div>
+<div class="w-full bg-secondary/80 rounded-t-lg h-[95%]" title="Sat"></div>
+<div class="w-full bg-primary/50 rounded-t-lg h-[70%]" title="Sun"></div>
+</div>
+<div class="flex justify-between mt-4 text-xs text-secondary/40 font-bold uppercase tracking-widest px-1">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+<!-- Recent Projects -->
+<div class="bg-accent border border-primary/20 rounded-2xl p-6 shadow-sm">
+<h3 class="text-lg font-bold text-secondary mb-6">Recent Projects</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4 p-3 rounded-xl hover:bg-primary/5 transition-colors cursor-pointer border border-transparent hover:border-primary/10">
+<div class="h-12 w-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-secondary">Project Artemis</p>
+<p class="text-xs text-secondary/50">LLM Reasoning Chains</p>
+</div>
+<span class="material-symbols-outlined text-secondary/30">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-xl hover:bg-primary/5 transition-colors cursor-pointer border border-transparent hover:border-primary/10">
+<div class="h-12 w-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">biotech</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-secondary">Synthetic Biology</p>
+<p class="text-xs text-secondary/50">Protein Folding Beta</p>
+</div>
+<span class="material-symbols-outlined text-secondary/30">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-xl hover:bg-primary/5 transition-colors cursor-pointer border border-transparent hover:border-primary/10">
+<div class="h-12 w-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">language</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-secondary">Global NLP</p>
+<p class="text-xs text-secondary/50">Low-resource dialects</p>
+</div>
+<span class="material-symbols-outlined text-secondary/30">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-xl hover:bg-primary/5 transition-colors cursor-pointer border border-transparent hover:border-primary/10">
+<div class="h-12 w-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-secondary">Cyber Shield</p>
+<p class="text-xs text-secondary/50">Neural Intrusion Detection</p>
+</div>
+<span class="material-symbols-outlined text-secondary/30">chevron_right</span>
+</div>
+</div>
+<button class="w-full mt-6 py-3 rounded-xl border border-primary/30 text-secondary font-bold text-sm hover:bg-primary/10 transition-colors">
+                                View All Projects
+                            </button>
+</div>
+</div>
+<!-- Bottom Status Grid -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-secondary rounded-3xl p-8 text-accent relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="text-2xl font-bold mb-2">New Simulation Ready</h4>
+<p class="opacity-70 mb-6 max-w-xs">Deployment of the 'Deep-Sea' synthetic debate environment is now available for evaluation.</p>
+<button class="bg-primary text-secondary px-6 py-2 rounded-xl font-bold hover:scale-105 transition-transform">Deploy Now</button>
+</div>
+<!-- Decorative element -->
+<div class="absolute -right-10 -bottom-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all"></div>
+</div>
+<div class="bg-primary rounded-3xl p-8 text-secondary flex flex-col justify-center">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-4xl">lightbulb</span>
+<h4 class="text-2xl font-bold">Research Insights</h4>
+</div>
+<p class="font-medium opacity-80 italic">"Autonomous agents in Project Artemis have increased their reasoning efficiency by 14% since the last epoch."</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

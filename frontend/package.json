@@ -1,0 +1,13 @@
+{
+    "name": "ai-research-warroom-frontend",
+    "version": "1.0.0",
+    "description": "Vanilla JS frontend for AI Research War-Room",
+    "scripts": {
+        "dev": "npx http-server . -p 3000",
+        "start": "npx http-server . -p 3000"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "http-server": "^14.1.1"
+    }
+}

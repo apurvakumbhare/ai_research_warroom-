@@ -1,0 +1,90 @@
+AI RESEARCH WAR-ROOM SYSTEM DESIGN DOCUMENT
+
+Version: 1.0.0
+Classification: Enterprise Internal
+Date: 2026-03-04
+
+-------------------------------------------------------------------------------
+TABLE OF CONTENTS
+-------------------------------------------------------------------------------
+1.  Introduction
+2.  Problem Statement
+3.  Functional Requirements
+4.  Non-Functional Requirements
+5.  Architecture Overview
+6.  Database Design
+7.  Caching Strategy
+8.  AI Processing Pipeline
+9.  Deployment Strategy
+10. Risk Assessment
+11. Conclusion
+
+-------------------------------------------------------------------------------
+1. INTRODUCTION
+The AI Research War-Room is a sophisticated multi-agent orchestration platform 
+designed to automate the rigor of peer review and strategic concept development. 
+By pitting specialized LLM agents against a single research idea, the system 
+extracts deep vulnerabilities and provides concrete optimization pathways.
+
+2. PROBLEM STATEMENT
+Modern research and startup planning often suffer from "confirmation bias" or 
+the high cost of expert human peer review. Prototyping and early-stage 
+refinement require a scalable, objective, and multi-perspective analysis tool.
+
+3. FUNCTIONAL REQUIREMENTS
+3.1. Project concept submission via text or PDF ingestion.
+3.2. Sequential multi-agent debate execution (Researcher, Critic, Optimizer, Devil's Advocate).
+3.3. Deterministic scoring of risk and concept confidence.
+3.4. Persistence of session logs and finalized research outputs.
+3.5. Clean text normalization for optimal LLM context utilization.
+
+4. NON-FUNCTIONAL REQUIREMENTS
+4.1. Reliability: Guaranteed persistence of AI outputs via RDBMS.
+4.2. Performance: Sub-second latency for API operations; async background AI tasks.
+4.3. Scalability: Stateless microservice pattern for horizontal scaling.
+4.4. Security: Container isolation and non-privileged user execution.
+
+5. ARCHITECTURE OVERVIEW
+The system utilizes a Clean Architecture featuring:
+- A Spring Boot controller layer for RESTful API management.
+- A service layer encapsulating business logic and orchestration orchestration.
+- A persistence layer using Spring Data JPA and Flyway migrations.
+- A cross-agent memory layer backed by Redis list primitives.
+
+6. DATABASE DESIGN
+The relational schema is built on PostgreSQL 15, utilizing UUID primary keys 
+to ensure globally unique identity across distributed instances. 
+Core tables include:
+- Projects: Stores foundational concept data and final synthesized reports.
+- Debate_Session: Metadata regarding specific execution runs.
+- Agent_Outputs: Granular JSON fragments retrieved from LLM agents.
+
+7. CACHING STRATEGY
+Redis is serving as a specialized conversation memory store rather than a 
+traditional data cache. The system maintains a LIST of role-prefixed JSON 
+strings per session. This allows subsequent agents in the pipeline to "read" 
+the previous debate history as if it were a single coherent transcript.
+
+8. AI PROCESSING PIPELINE
+The processing pipeline implements a Strategy Pattern for agent roles. 
+Each agent is responsible for:
+- Constructing its specific role-based prompt.
+- Calling the OpenAI Completion API via the ChatClient abstraction.
+- Validating the structured JSON response.
+- Sanitizing and formatting output for both storage and consumption by the next agent.
+
+9. DEPLOYMENT STRATEGY
+Deployment is orchestrated via Docker Compose, utilizing multi-stage builds 
+to minimize image surface area. The production bundle includes a 
+PostgreSQL instance for permanent storage and a Redis instance for ephemeral 
+context management.
+
+10. RISK ASSESSMENT
+10.1. API Latency: Mitigated by asynchronous execution and status polling.
+10.2. Hallucinations: Mitigated by strict JSON output enforcement and deterministic scoring.
+10.3. Cost: Managed through efficient text cleaning and token optimization.
+
+11. CONCLUSION
+The AI Research War-Room provides a robust, production-grade foundation for 
+automated concept refinement. Its modular architecture ensures it can adapt 
+to new LLM providers or additional agent personalities with minimal friction.

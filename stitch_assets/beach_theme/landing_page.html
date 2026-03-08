@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Research War-Room | Collaborative Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a7c7e7",
+                        "background-light": "#fdfaf7", // Soft sand/beach tone
+                        "background-dark": "#13191f",
+                        "sand": {
+                            50: "#fdfaf7",
+                            100: "#f9f2eb",
+                            200: "#f3e5d7",
+                            300: "#e7d4c1",
+                            400: "#d3b9a3",
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(167, 199, 231, 0.2), transparent),
+                        radial-gradient(circle at bottom left, rgba(211, 185, 163, 0.15), transparent);
+        }
+    </style>
+</head>
+<body class="bg-sand-50 dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative min-h-screen overflow-x-hidden hero-gradient">
+<!-- Navigation -->
+<header class="sticky top-0 z-50 px-6 lg:px-20 py-4">
+<nav class="max-w-7xl mx-auto flex items-center justify-between glass-card rounded-2xl px-6 py-3 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="bg-primary/30 p-2 rounded-lg">
+<span class="material-symbols-outlined text-slate-800">shield_with_heart</span>
+</div>
+<h2 class="text-slate-900 font-bold text-xl tracking-tight">AI War-Room</h2>
+</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-slate-600 hover:text-primary transition-colors text-sm font-medium" href="#">Features</a>
+<a class="text-slate-600 hover:text-primary transition-colors text-sm font-medium" href="#">Methodology</a>
+<a class="text-slate-600 hover:text-primary transition-colors text-sm font-medium" href="#">Pricing</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-slate-700 text-sm font-semibold hover:text-primary px-4 py-2">Sign In</button>
+<button class="bg-primary hover:bg-primary/80 text-slate-900 px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm">
+                        Get Started
+                    </button>
+</div>
+</nav>
+</header>
+<main class="max-w-7xl mx-auto px-6 lg:px-20 pt-12 pb-24">
+<!-- Hero Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-32">
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-200/50 border border-sand-300 text-slate-700 text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+                        Next-Gen Research Synthesis
+                    </div>
+<div class="space-y-4">
+<h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                            AI Agents That <span class="text-primary">Debate</span> Your Ideas
+                        </h1>
+<p class="text-lg lg:text-xl text-slate-600 leading-relaxed max-w-xl">
+                            Professional AI-powered analysis for complex research missions. Experience the power of collaborative machine intelligence with a human touch.
+                        </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 pt-4">
+<button class="bg-primary hover:bg-primary/90 text-slate-900 h-14 px-8 rounded-2xl font-bold text-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+<span>Start New Project</span>
+<span class="material-symbols-outlined">rocket_launch</span>
+</button>
+<button class="glass-card hover:bg-white/60 text-slate-800 h-14 px-8 rounded-2xl font-bold text-lg border border-sand-300 transition-all flex items-center justify-center gap-2">
+<span>Upload Research Paper</span>
+<span class="material-symbols-outlined">upload_file</span>
+</button>
+</div>
+<div class="flex items-center gap-4 text-sm text-slate-500 font-medium pt-2">
+<div class="flex -space-x-3">
+<div class="size-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Researcher profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDakeCOZHs4OqDceFuD0v1knVmbhoI-Nmrefis7JlRqPQSF6UXJdPlL1Qqa6nmAMMzK4p-d4QcerdBmbSP-Wh2jcbvwvv4Pn74dxRO8dsJq2Y0zNNL8CyUBOVSe7nITaZVS4-D4DyLBZwTh6SNowG5M7aibOD3adZ-DS1YO18J18P-lNIAV0WZ6A_BVw_0pzakeT4KKJpqzppotYnbSXY55zwivhhaL8-O8Dmklz94e8fJwmZ-0-ou0pJUtijj96BEpH1uUDoMk0fw"/>
+</div>
+<div class="size-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Data scientist avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFjYVoGAxhp7Box1MvPQy42ypWW3YDwJC9psE8nY0Wk0LWygZgh-Dffdo2Muu-W3iA37R589EMKNem92SYykSwYHYTCdE7IwB_InpESPBu21lfNcR1edfl2t--7Ubqcd43IgW0K_l3Pwmo4RFzeSHjBVEieCsXW39kkOYlQCRZdxczyRCqW102Z_HDL_VkeRAZ0Chb1NekhOongZ6UEffPC1vTjT-urz1OsrTk0m2SgFuAJOJcjqPr46fxFQXj6DefqSV_p5svwIU"/>
+</div>
+<div class="size-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Academic researcher avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9ndM7mFLb2yESJTTDEENsyajeQd8of6Tw9LUIiQqDLdLhgmBP6CZvCC7oVmN9tqHPJsm917vUHQPAO8U0N0SVoWu0yMdu_PdgnA-k6mM5_w93mv0xwqpOd-NmwDbCkZ_rxOvL7XHUskjk-jpFkG2EVIIqoCUWAa4AaGNL_bmw_CHRZHznuQKr4OvuJioEgpxGvxqnsJqy5kV8pFOvckbnsK32J5j0esTwpRP30lV0e1lmuntJuB2Xsfg8gfnLtUfSsevjT_oEeR8"/>
+</div>
+</div>
+<span>Trusted by 2,000+ research teams</span>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -top-10 -right-10 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-10 -left-10 w-64 h-64 bg-sand-300/30 rounded-full blur-3xl"></div>
+<div class="relative glass-card rounded-3xl p-4 shadow-2xl overflow-hidden aspect-square flex items-center justify-center">
+<img class="w-full h-full object-cover rounded-2xl shadow-inner" data-alt="Abstract visualization of AI agents collaborating in a warm digital space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9dQ4RkUgjYoKgDN3tknzBPxyneT6gPRwkbWQOO9wcqfGnHfZ93ucqtJBUQ7YFKbqSjg8K9BWXuZtCi-rJADI0jU5q2PMnZ0qpRFIofB0znlOiyjk_X7P6LvO0AFt4X2zZVhoY1OCXoO3n2-PXXh-DgqopYLNe8ToF5cxPYsIC1-7KaAGset_UWF7HOFiPin6Nb8R35f8-Bmnw7ZwptINijEfHJUSUgo9x7g_HYYQVmIyZk-dR1KR22B0Uxk6moYsKXUmo4mXUo2Q"/>
+<div class="absolute bottom-10 right-10 glass-card p-4 rounded-2xl shadow-lg border border-white/50 max-w-[200px]">
+<div class="flex items-center gap-2 mb-2">
+<div class="size-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase">Live Analysis</span>
+</div>
+<p class="text-xs font-semibold text-slate-800">Agent Alpha: "The data suggests a 15% increase in efficiency..."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Features Section -->
+<section class="py-20">
+<div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+<h2 class="text-3xl lg:text-4xl font-black text-slate-900">The War-Room Advantage</h2>
+<p class="text-slate-600">Our multi-agent system provides deep insights through adversarial analysis and collaborative synthesis, ensuring no stone is left unturned.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Feature 1 -->
+<div class="glass-card p-8 rounded-3xl border border-white/40 hover:translate-y-[-8px] transition-transform duration-300 group">
+<div class="size-14 bg-primary/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-slate-800 text-3xl">forum</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-3">Multi-Agent Debate</h3>
+<p class="text-slate-600 leading-relaxed">Multiple AI personas challenge your hypotheses from different perspectives to find the unvarnished truth.</p>
+</div>
+<!-- Feature 2 -->
+<div class="glass-card p-8 rounded-3xl border border-white/40 hover:translate-y-[-8px] transition-transform duration-300 group">
+<div class="size-14 bg-sand-200/50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-slate-800 text-3xl">analytics</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-3">Research Analysis</h3>
+<p class="text-slate-600 leading-relaxed">Deep dive into complex datasets with automated literature reviews and cross-referenced academic sources.</p>
+</div>
+<!-- Feature 3 -->
+<div class="glass-card p-8 rounded-3xl border border-white/40 hover:translate-y-[-8px] transition-transform duration-300 group">
+<div class="size-14 bg-primary/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-slate-800 text-3xl">security_update_good</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-3">Risk &amp; Confidence</h3>
+<p class="text-slate-600 leading-relaxed">Quantifiable metrics for uncertainty and strategic risk assessment, allowing you to move forward with clarity.</p>
+</div>
+</div>
+</section>
+<!-- Active Missions Section -->
+<section class="py-12">
+<div class="flex items-center justify-between mb-8 px-4">
+<h2 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">monitoring</span>
+                        Research Missions in Progress
+                    </h2>
+<button class="text-slate-500 text-sm font-semibold hover:text-primary transition-colors">View All Missions</button>
+</div>
+<div class="overflow-x-auto glass-card rounded-3xl border border-white/30 shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-sand-200/50">
+<th class="px-8 py-5 text-sm font-bold text-slate-500 uppercase tracking-wider">Project Name</th>
+<th class="px-8 py-5 text-sm font-bold text-slate-500 uppercase tracking-wider">Agent Consensus</th>
+<th class="px-8 py-5 text-sm font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="px-8 py-5 text-sm font-bold text-slate-500 uppercase tracking-wider">Last Updated</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-sand-200/30">
+<tr class="hover:bg-white/40 transition-colors">
+<td class="px-8 py-6 text-slate-900 font-semibold">Market Disruption Alpha</td>
+<td class="px-8 py-6">
+<span class="px-4 py-1.5 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200/50">High</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-24 h-2 bg-sand-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 80%"></div>
+</div>
+<span class="text-sm font-bold text-slate-700">80%</span>
+</div>
+</td>
+<td class="px-8 py-6 text-slate-500 text-sm italic">2 mins ago</td>
+</tr>
+<tr class="hover:bg-white/40 transition-colors">
+<td class="px-8 py-6 text-slate-900 font-semibold">Bio-Tech Feasibility</td>
+<td class="px-8 py-6">
+<span class="px-4 py-1.5 rounded-full bg-sand-200 text-sand-700 text-xs font-bold border border-sand-300/50">Medium</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-24 h-2 bg-sand-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 45%"></div>
+</div>
+<span class="text-sm font-bold text-slate-700">45%</span>
+</div>
+</td>
+<td class="px-8 py-6 text-slate-500 text-sm italic">1 hour ago</td>
+</tr>
+<tr class="hover:bg-white/40 transition-colors">
+<td class="px-8 py-6 text-slate-900 font-semibold">Quantum Ethics Review</td>
+<td class="px-8 py-6">
+<span class="px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-bold border border-orange-200/50">Divergent</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-24 h-2 bg-sand-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 20%"></div>
+</div>
+<span class="text-sm font-bold text-slate-700">20%</span>
+</div>
+</td>
+<td class="px-8 py-6 text-slate-500 text-sm italic">Yesterday</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="max-w-7xl mx-auto px-6 lg:px-20 py-12 border-t border-sand-200/50">
+<div class="flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="bg-primary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-slate-700">shield_with_heart</span>
+</div>
+<span class="font-bold text-slate-900">AI War-Room</span>
+</div>
+<div class="flex gap-8 text-sm text-slate-500">
+<a class="hover:text-primary" href="#">Privacy</a>
+<a class="hover:text-primary" href="#">Terms</a>
+<a class="hover:text-primary" href="#">Contact</a>
+<a class="hover:text-primary" href="#">Twitter</a>
+</div>
+<p class="text-xs text-slate-400">© 2024 AI Research War-Room. All rights reserved.</p>
+</div>
+</footer>
+</div>
+</body></html>

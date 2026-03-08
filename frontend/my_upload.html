@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiate Research | AI Research War-Room</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .dropzone {
+            border: 2px dashed var(--sand-300);
+            background: rgba(243, 229, 215, 0.3);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dropzone:hover {
+            border-color: var(--primary);
+            background: rgba(167, 199, 231, 0.1);
+        }
+
+        .dropzone.drag-over {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+    </style>
+</head>
+
+<body class="bg-sand-50">
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="p-6 flex items-center gap-3">
+                <div class="message-avatar"
+                    style="background: var(--primary); color: var(--slate-900); width: 32px; height: 32px;">
+                    <span class="material-symbols-outlined">shield</span>
+                </div>
+                <h2 style="font-size: 1.125rem; font-weight: 700; color: var(--driftwood);">AI War-Room</h2>
+            </div>
+
+            <nav class="flex-col gap-1 p-4">
+                <p
+                    style="font-size: 0.625rem; font-weight: 800; text-transform: uppercase; color: var(--slate-400); padding: 0.5rem 1rem;">
+                    Strategic Command</p>
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="my_upload.html" class="flex items-center gap-3 px-4 py-3"
+                    style="background: var(--primary); color: var(--slate-900); border-radius: 0.75rem; font-weight: 600;">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    New Project
+                </a>
+                <a href="debate.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">forum</span>
+                    Active Debates
+                </a>
+                <a href="reports.html" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition-all"
+                    style="border-radius: 0.75rem; color: var(--slate-600);">
+                    <span class="material-symbols-outlined">description</span>
+                    Reports
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header class="h-16 flex items-center px-8 border-b"
+                style="background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);">
+                <div class="flex items-center gap-2 text-sm text-slate-500">
+                    <span>Projects</span>
+                    <span class="material-symbols-outlined" style="font-size: 14px;">chevron_right</span>
+                    <span style="font-weight: 600; color: var(--slate-900);">Initiate Research</span>
+                </div>
+            </header>
+
+            <div class="p-8 lg:p-12" style="max-width: 900px; margin: 0 auto;">
+                <div class="mb-10">
+                    <h2 style="font-size: 2.5rem; font-weight: 800; color: var(--slate-900); margin-bottom: 0.75rem;">
+                        New Strategic Project</h2>
+                    <p style="font-size: 1.125rem; color: var(--slate-500);">Initiate a new research initiative and
+                        prime the AI models.</p>
+                </div>
+
+                <form class="space-y-8" id="upload-form">
+                    <div class="input-group">
+                        <label class="input-label" for="project-name">Project Name</label>
+                        <input class="input-field" type="text" id="project-name"
+                            placeholder="e.g., Quantum Cryptography Impact Analysis">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="hypothesis">Core Hypothesis</label>
+                        <textarea class="input-field" id="hypothesis" rows="5"
+                            placeholder="Define the primary thesis for the AI debate..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Intelligence Briefing Materials</label>
+                        <div class="dropzone" id="dropzone">
+                            <div class="message-avatar"
+                                style="background: #fff; color: var(--slate-300); width: 64px; height: 64px; margin: 0 auto 1.5rem auto; box-shadow: var(--shadow-sm);">
+                                <span class="material-symbols-outlined" style="font-size: 32px;">cloud_upload</span>
+                            </div>
+                            <h4 style="font-weight: 700; font-size: 1.125rem;">Upload research documents</h4>
+                            <p
+                                style="font-size: 0.875rem; color: var(--slate-500); max-width: 300px; margin: 0.5rem auto;">
+                                Drag and drop PDFs, Whitepapers, or Raw Data.</p>
+                            <input type="file" id="file-input" hidden multiple>
+                            <button type="button" class="btn btn-secondary" style="margin-top: 1.5rem;"
+                                onclick="document.getElementById('file-input').click()">Browse Files</button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 pt-6">
+                        <button type="submit" class="btn btn-primary btn-lg"
+                            style="box-shadow: 0 10px 20px -5px rgba(167, 199, 231, 0.4);">
+                            <span class="material-symbols-outlined">rocket_launch</span>
+                            Start AI Debate
+                        </button>
+                    </div>
+
+                    <!-- Upload Intel Section -->
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--sand-200);">
+                        <p
+                            style="font-size: 0.875rem; font-weight: 700; color: var(--slate-700); margin-bottom: 0.75rem;">
+                            Intel Attachments
+                        </p>
+                        <button type="button" id="uploadIntelBtn" class="btn btn-secondary"
+                            aria-label="Upload intel file to this project" aria-controls="intel-file-input"
+                            style="gap: 0.5rem;">
+                            <span class="material-symbols-outlined">attach_file</span>
+                            Upload Intel
+                        </button>
+                        <input type="file" id="intel-file-input"
+                            accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+                            aria-label="Intel file upload" style="display: none;" tabindex="-1">
+                        <!-- Attachment status -->
+                        <div id="intel-attachment-status" style="display: none; margin-top: 0.875rem;">
+                            <div
+                                style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--sand-100); border: 1px solid var(--sand-200); border-radius: var(--radius-lg);">
+                                <span class="material-symbols-outlined"
+                                    style="color: var(--ocean); font-size: 22px;">description</span>
+                                <div style="flex: 1; min-width: 0;">
+                                    <p id="intel-file-name"
+                                        style="font-size: 0.875rem; font-weight: 700; color: var(--slate-900); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    </p>
+                                    <p id="intel-file-meta"
+                                        style="font-size: 0.75rem; color: var(--slate-500); margin: 0;"></p>
+                                </div>
+                                <button type="button" id="removeIntelBtn" aria-label="Remove attached intel file"
+                                    style="background: none; border: none; cursor: pointer; color: var(--slate-400); padding: 4px; border-radius: 50%; line-height: 1;">
+                                    <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Validation error -->
+                        <p id="intel-file-error" role="alert"
+                            style="display: none; margin-top: 0.5rem; font-size: 0.8125rem; color: #b91c1c; font-weight: 600;">
+                        </p>
+                    </div>
+                </form>
+
+                <div class="mt-16 p-6"
+                    style="background: var(--sand-100); border-radius: 1.5rem; border: 1px solid var(--sand-200); display: flex; gap: 1.5rem;">
+                    <span class="material-symbols-outlined"
+                        style="color: var(--primary); font-size: 24px;">lightbulb</span>
+                    <div>
+                        <h5 style="font-weight: 700; font-size: 0.875rem; margin-bottom: 0.25rem;">Expert Tip</h5>
+                        <p style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
+                            Providing diverse briefing materials helps the AI agents construct more robust
+                            counter-arguments. Include dissenting opinions for better results.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/upload.js"></script>
+</body>
+
+</html>

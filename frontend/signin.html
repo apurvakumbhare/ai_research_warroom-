@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | AI Research War-Room</title>
+    <meta name="description" content="Sign in or create your account to access the AI Research War-Room.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        /* ── Page Layout ─────────────────────────────────── */
+        .auth-bg {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem 4rem;
+            background:
+                radial-gradient(circle at top right, rgba(167, 199, 231, 0.22), transparent 60%),
+                radial-gradient(circle at bottom left, rgba(211, 185, 163, 0.18), transparent 60%);
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 2.75rem;
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ── Toggle strip ────────────────────────────────── */
+        .auth-toggle-strip {
+            display: flex;
+            gap: 0;
+            background: var(--slate-100);
+            border-radius: var(--radius-lg);
+            padding: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .auth-toggle-btn {
+            flex: 1;
+            padding: 0.625rem 1rem;
+            border: none;
+            background: transparent;
+            border-radius: calc(var(--radius-lg) - 4px);
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--slate-500);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .auth-toggle-btn.active {
+            background: #fff;
+            color: var(--slate-900);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ── Field error messages ────────────────────────── */
+        .field-error {
+            display: none;
+            font-size: 0.75rem;
+            color: #b91c1c;
+            margin-top: 0.375rem;
+            font-weight: 600;
+        }
+
+        .field-error.visible {
+            display: block;
+        }
+
+        .input-field.invalid {
+            border-color: #f87171;
+            box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.2);
+        }
+
+        .input-field.valid {
+            border-color: #4ade80;
+        }
+
+        /* ── Select field ────────────────────────────────── */
+        .select-field {
+            width: 100%;
+            padding: 1rem;
+            background: #fff;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            color: var(--slate-700);
+            transition: border-color 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%2394a3b8' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        .select-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-light);
+            outline: none;
+        }
+
+        /* ── Divider ─────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--slate-200);
+        }
+
+        .divider span {
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Form section animation ──────────────────────── */
+        .form-panel {
+            display: none;
+        }
+
+        .form-panel.active {
+            display: block;
+            animation: fadeSlideIn 0.25s ease;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Global feedback banner ──────────────────────── */
+        .form-banner {
+            display: none;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-banner.success {
+            display: flex;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .form-banner.error {
+            display: flex;
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+
+<body class="auth-bg">
+    <!-- Top nav -->
+    <header style="position: absolute; top: 0; left: 0; right: 0; padding: 1.25rem 2rem;">
+        <nav
+            style="display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <div class="message-avatar"
+                    style="background: var(--driftwood); color: #fff; width: 32px; height: 32px;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">shield</span>
+                </div>
+                <span style="font-size: 1rem; font-weight: 800; color: var(--slate-900);">AI Research War-Room</span>
+            </a>
+            <a href="index.html"
+                style="font-size: 0.875rem; color: var(--slate-500); font-weight: 600; text-decoration: none;">
+                ← Back to home
+            </a>
+        </nav>
+    </header>
+
+    <!-- Auth Card -->
+    <div class="auth-card" id="auth-card">
+
+        <!-- Logo -->
+        <div style="text-align: center; margin-bottom: 1.75rem;">
+            <div class="message-avatar"
+                style="background: var(--primary); color: var(--slate-900); width: 48px; height: 48px; margin: 0 auto 1rem;">
+                <span class="material-symbols-outlined">shield</span>
+            </div>
+            <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--slate-900); margin: 0;">Welcome</h1>
+            <p style="color: var(--slate-500); font-size: 0.9rem; margin: 4px 0 0;">
+                Access your strategic research dashboard</p>
+        </div>
+
+        <!-- Toggle: Register / Log In -->
+        <div class="auth-toggle-strip" role="tablist" aria-label="Authentication mode">
+            <button id="tab-register" class="auth-toggle-btn active" role="tab" aria-selected="true"
+                aria-controls="panel-register">
+                Sign Up
+            </button>
+            <button id="tab-login" class="auth-toggle-btn" role="tab" aria-selected="false" aria-controls="panel-login">
+                Log In
+            </button>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════  -->
+        <!--  PANEL A — Registration Form                        -->
+        <!-- ══════════════════════════════════════════════════  -->
+        <div id="panel-register" class="form-panel active" role="tabpanel" aria-labelledby="tab-register">
+
+            <!-- Already signed in? line -->
+            <p style="font-size: 0.875rem; color: var(--slate-500); margin: 0 0 1.25rem; text-align: center;">
+                Already have an account?
+                <button type="button" id="switch-to-login"
+                    style="background: none; border: none; cursor: pointer; color: var(--ocean); font-weight: 700; font-size: 0.875rem; padding: 0;"
+                    aria-label="Switch to log in form">
+                    Log in →
+                </button>
+            </p>
+
+            <div id="register-banner" class="form-banner" role="alert" aria-live="polite"></div>
+
+            <form id="register-form" novalidate autocomplete="off"
+                style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+                <!-- Email -->
+                <div class="input-group">
+                    <label class="input-label" for="reg-email">Email Address <span aria-hidden="true"
+                            style="color:#b91c1c">*</span></label>
+                    <div style="position: relative;">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 20px; pointer-events: none;">
+                            mail
+                        </span>
+                        <input type="email" id="reg-email" name="email" class="input-field"
+                            placeholder="name@institution.edu" style="padding-left: 3rem;" autocomplete="email"
+                            aria-required="true" aria-describedby="reg-email-error">
+                    </div>
+                    <span id="reg-email-error" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Contact Name -->
+                <div class="input-group">
+                    <label class="input-label" for="reg-name">Full Name <span aria-hidden="true"
+                            style="color:#b91c1c">*</span></label>
+                    <div style="position: relative;">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 20px; pointer-events: none;">
+                            person
+                        </span>
+                        <input type="text" id="reg-name" name="name" class="input-field" placeholder="Dr. Jane Smith"
+                            style="padding-left: 3rem;" autocomplete="name" aria-required="true"
+                            aria-describedby="reg-name-error">
+                    </div>
+                    <span id="reg-name-error" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="input-group">
+                    <label class="input-label" for="reg-dob">Date of Birth <span aria-hidden="true"
+                            style="color:#b91c1c">*</span></label>
+                    <input type="date" id="reg-dob" name="dob" class="input-field" aria-required="true"
+                        aria-describedby="reg-dob-error">
+                    <span id="reg-dob-error" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Role -->
+                <div class="input-group">
+                    <label class="input-label" for="reg-role">Role <span aria-hidden="true"
+                            style="color:#b91c1c">*</span></label>
+                    <select id="reg-role" name="role" class="select-field" aria-required="true"
+                        aria-describedby="reg-role-error">
+                        <option value="" disabled selected>Select your role…</option>
+                        <option value="researcher">Researcher</option>
+                        <option value="student">Student</option>
+                    </select>
+                    <span id="reg-role-error" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group">
+                    <label class="input-label" for="reg-password">Password <span aria-hidden="true"
+                            style="color:#b91c1c">*</span></label>
+                    <div style="position: relative;">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 20px; pointer-events: none;">
+                            lock
+                        </span>
+                        <input type="password" id="reg-password" name="password" class="input-field"
+                            placeholder="At least 8 characters" style="padding-left: 3rem; padding-right: 3rem;"
+                            autocomplete="new-password" aria-required="true" aria-describedby="reg-password-error">
+                        <button type="button" class="toggle-pwd" data-target="reg-password" aria-label="Show password"
+                            style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--slate-400); padding: 0; line-height: 1;">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+                        </button>
+                    </div>
+                    <span id="reg-password-error" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="input-group">
+                    <label class="input-label" for="reg-confirm">Confirm Password <span aria-hidden="true"
+                            style="color:#b91c1c">*</span></label>
+                    <div style="position: relative;">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 20px; pointer-events: none;">
+                            lock_reset
+                        </span>
+                        <input type="password" id="reg-confirm" name="confirm" class="input-field"
+                            placeholder="Repeat your password" style="padding-left: 3rem; padding-right: 3rem;"
+                            autocomplete="new-password" aria-required="true" aria-describedby="reg-confirm-error">
+                        <button type="button" class="toggle-pwd" data-target="reg-confirm"
+                            aria-label="Show confirm password"
+                            style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--slate-400); padding: 0; line-height: 1;">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+                        </button>
+                    </div>
+                    <span id="reg-confirm-error" class="field-error" role="alert"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full"
+                    style="padding: 1rem; margin-top: 0.25rem; background: var(--driftwood); color: #fff; font-size: 1rem;">
+                    Sign Up
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════  -->
+        <!--  PANEL B — Inline Login Form                        -->
+        <!-- ══════════════════════════════════════════════════  -->
+        <div id="panel-login" class="form-panel" role="tabpanel" aria-labelledby="tab-login">
+
+            <div id="login-banner" class="form-banner" role="alert" aria-live="polite"></div>
+
+            <form id="login-form" novalidate style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+                <!-- Email -->
+                <div class="input-group">
+                    <label class="input-label" for="login-email">Email Address</label>
+                    <div style="position: relative;">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 20px; pointer-events: none;">
+                            mail
+                        </span>
+                        <input type="email" id="login-email" name="email" class="input-field"
+                            placeholder="name@company.com" style="padding-left: 3rem;" autocomplete="email"
+                            aria-required="true" aria-describedby="login-email-error">
+                    </div>
+                    <span id="login-email-error" class="field-error" role="alert"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label class="input-label" for="login-password">Password</label>
+                        <a href="#"
+                            style="font-size: 0.75rem; color: var(--ocean); font-weight: 600; text-decoration: none;">
+                            Forgot password?
+                        </a>
+                    </div>
+                    <div style="position: relative;">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 20px; pointer-events: none;">
+                            lock
+                        </span>
+                        <input type="password" id="login-password" name="password" class="input-field"
+                            placeholder="••••••••" style="padding-left: 3rem; padding-right: 3rem;"
+                            autocomplete="current-password" aria-required="true"
+                            aria-describedby="login-password-error">
+                        <button type="button" class="toggle-pwd" data-target="login-password" aria-label="Show password"
+                            style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--slate-400); padding: 0; line-height: 1;">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+                        </button>
+                    </div>
+                    <span id="login-password-error" class="field-error" role="alert"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full"
+                    style="padding: 1rem; background: var(--driftwood); color: #fff; font-size: 1rem;">
+                    Sign In to War-Room
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+
+                <div class="divider"><span>Or continue with</span></div>
+
+                <button type="button" class="btn btn-secondary w-full"
+                    style="padding: 0.875rem; background: #fff; border: 1px solid var(--slate-200);">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google"
+                        style="width: 20px; height: 20px;">
+                    Google Account
+                </button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: var(--slate-500);">
+                Don't have an account?
+                <button type="button" id="switch-to-register"
+                    style="background: none; border: none; cursor: pointer; color: var(--ocean); font-weight: 700; font-size: 0.875rem; padding: 0;">
+                    Sign Up →
+                </button>
+            </p>
+        </div>
+
+    </div>
+    <!-- /Auth Card -->
+
+
+
+    <script src="js/auth-form.js"></script>
+</body>
+
+</html>
