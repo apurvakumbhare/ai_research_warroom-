@@ -649,8 +649,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ─────────────────────────────────────────────────────────────────────────
     //  POLLING
     // ─────────────────────────────────────────────────────────────────────────
-    async function pollDebateStatus() {
-        if (isPaused || isEnded) return;
+    async function pollDebateStatus(forcePoll = false) {
+        if (!forcePoll && (isPaused || isEnded)) return;
 
         let retries = 0;
         while (retries < 3) {
@@ -795,9 +795,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const titleEl     = document.getElementById('debate-session-title');
             const topicEl     = document.getElementById('debate-topic-text');
+            const hypothesisEl= document.getElementById('project-hypothesis-text');
             
             if (titleEl)     titleEl.textContent     = `Live Debate: ${projectName}`;
             if (topicEl)     topicEl.textContent     = `Topic: ${projectName}`;
+            if (hypothesisEl) hypothesisEl.textContent = `CONTEXT: PROJECT DOCUMENTS`;
 
             // Trigger Intel fetch now that we have the proper projectId
             fetchIntelDocuments();
@@ -853,5 +855,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Begin polling
     pollIntervalId = setInterval(pollDebateStatus, 3000);
-    pollDebateStatus();
+    pollDebateStatus(true);
 });
