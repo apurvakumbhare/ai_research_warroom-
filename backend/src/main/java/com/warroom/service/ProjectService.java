@@ -5,21 +5,19 @@ import com.warroom.dto.ProjectResponse;
 import com.warroom.dto.WarRoomResult;
 import com.warroom.entity.Project;
 import com.warroom.exception.WarRoomException;
-import com.warroom.mapper.ProjectMapper;
 import com.warroom.repository.ProjectRepository;
 import com.warroom.service.orchestrator.WarRoomOrchestrator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * Service for managing the business logic of projects.
- * Bridges the API layer with persistence and the AI orchestration engine.
+ * Service layer for managing AI Research Projects.
  */
 @Slf4j
 @Service
@@ -27,58 +25,75 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
-    private final ProjectMapper projectMapper;
     private final WarRoomOrchestrator warRoomOrchestrator;
 
-    @Transactional
     public ProjectResponse create(ProjectRequest request) {
-        log.info("Creating new project: {}", request.getProjectName());
-        Project project = projectMapper.toEntity(request);
-        Project savedProject = projectRepository.save(project);
-        return projectMapper.toResponse(savedProject);
+        log.info("Creating project: {}", request.getProjectName());
+        Project project = Project.builder()
+                .projectName(request.getProjectName())
+                .coreHypothesis(request.getCoreHypothesis())
+                .type(request.getType())
+                .participantIds(request.getParticipantIds())
+                .status("CREATED")
+                .createdAt(new Date())
+                .updatedAt(new Date())
+                .build();
+        project = projectRepository.save(project);
+        return toResponse(project);
     }
 
-    @Transactional(readOnly = true)
     public ProjectResponse getById(UUID id) {
-        log.debug("Retrieving project by ID: {}", id);
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new WarRoomException("PROJECT_NOT_FOUND", "Project not found with ID: " + id));
-        return projectMapper.toResponse(project);
+                .orElseThrow(() -> new WarRoomException("PROJECT_NOT_FOUND",
+                        "Project not found with ID: " + id));
+        return toResponse(project);
     }
 
-    @Transactional(readOnly = true)
     public List<ProjectResponse> getAll() {
-        log.debug("Retrieving all projects");
         return projectRepository.findAll().stream()
-                .map(projectMapper::toResponse)
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     public ProjectResponse update(UUID id, ProjectRequest request) {
-        log.info("Updating project: {}", id);
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new WarRoomException("PROJECT_NOT_FOUND", "Project not found with ID: " + id));
+                .orElseThrow(() -> new WarRoomException("PROJECT_NOT_FOUND",
+                        "Project not found with ID: " + id));
 
-        projectMapper.updateEntity(request, project);
-        Project updatedProject = projectRepository.save(project);
-        return projectMapper.toResponse(updatedProject);
+        if (request.getProjectName() != null) project.setProjectName(request.getProjectName());
+        if (request.getCoreHypothesis() != null) project.setCoreHypothesis(request.getCoreHypothesis());
+        if (request.getType() != null) project.setType(request.getType());
+        if (request.getParticipantIds() != null) project.setParticipantIds(request.getParticipantIds());
+        project.setUpdatedAt(new Date());
+
+        project = projectRepository.save(project);
+        return toResponse(project);
     }
 
-    @Transactional
     public void delete(UUID id) {
-        log.warn("Deleting project: {}", id);
         if (!projectRepository.existsById(id)) {
-            throw new WarRoomException("PROJECT_NOT_FOUND", "Cannot delete non-existent project: " + id);
+            throw new WarRoomException("PROJECT_NOT_FOUND", "Project not found with ID: " + id);
         }
         projectRepository.deleteById(id);
     }
 
-    /**
-     * Triggers the multi-agent AI debate pipeline.
-     */
     public WarRoomResult runWarRoom(UUID projectId) {
-        log.info("Delegating to WarRoomOrchestrator for project: {}", projectId);
-        return warRoomOrchestrator.executeWarRoom(projectId);
+        log.info("Running War-Room for project: {}", projectId);
+        return warRoomOrchestrator.startOrchestration(projectId);
+    }
+
+    private ProjectResponse toResponse(Project project) {
+        return ProjectResponse.builder()
+                .id(project.getId())
+                .projectName(project.getProjectName())
+                .coreHypothesis(project.getCoreHypothesis())
+                .ownerId(project.getOwnerId())
+                .participantIds(project.getParticipantIds())
+                .type(project.getType())
+                .status(project.getStatus())
+                .finalContent(project.getFinalContent())
+                .createdAt(project.getCreatedAt())
+                .updatedAt(project.getUpdatedAt())
+                .build();
     }
 }

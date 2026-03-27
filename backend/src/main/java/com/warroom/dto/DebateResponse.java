@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -26,7 +25,7 @@ public class DebateResponse {
 
     private String message;
 
-    private LocalDateTime startedAt;
+    private String startedAt;
 
     private java.util.List<AgentMessage> messages;
 }

@@ -204,7 +204,8 @@
                                 alt="Dr. Vance">
                             <div class="status-badge-online"></div>
                         </div>
-                        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--slate-900);">Dr. Alistair Vance
+                        <h2 id="user-full-name-heading"
+                            style="font-size: 1.5rem; font-weight: 800; color: var(--slate-900);">Dr. Alistair Vance
                         </h2>
                         <p
                             style="color: var(--primary); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; margin: 0.5rem 0 1rem;">
@@ -248,7 +249,7 @@
                         <div class="info-grid">
                             <div class="info-item">
                                 <label>Full Name</label>
-                                <div class="info-value">Alistair Vance</div>
+                                <div id="user-full-name-display" class="info-value">Alistair Vance</div>
                             </div>
                             <div class="info-item">
                                 <label>Username</label>
@@ -256,11 +257,11 @@
                             </div>
                             <div class="info-item">
                                 <label>Email Address</label>
-                                <div class="info-value">vance.a@warroom.research.org</div>
+                                <div id="user-email-display" class="info-value">vance.a@warroom.research.org</div>
                             </div>
                             <div class="info-item">
                                 <label>Research Focus</label>
-                                <div class="info-value">Adversarial ML & Alignment</div>
+                                <div id="user-role-display" class="info-value">Adversarial ML & Alignment</div>
                             </div>
                         </div>
                     </div>
@@ -325,6 +326,7 @@
         </main>
     </div>
     <script src="js/navigation.js"></script>
+    <script src="js/profile.js"></script>
 </body>
 
 </html>

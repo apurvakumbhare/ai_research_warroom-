@@ -23,10 +23,6 @@ public class DebateController {
 
     /**
      * Initiates the multi-agent debate pipeline for a specific project.
-     * This process is typically asynchronous.
-     * 
-     * @param projectId the project to analyze
-     * @return the immediate trigger result or initial state
      */
     @PostMapping("/{projectId}")
     public ResponseEntity<WarRoomResult> startDebate(@PathVariable UUID projectId) {
@@ -37,9 +33,6 @@ public class DebateController {
 
     /**
      * Checks the current status of an ongoing debate.
-     * 
-     * @param projectId the project being analyzed
-     * @return the current status and intermediate outputs
      */
     @GetMapping("/{projectId}/status")
     public ResponseEntity<DebateResponse> getDebateStatus(@PathVariable UUID projectId) {
@@ -57,6 +50,16 @@ public class DebateController {
         log.info("Injecting human message into debate for project id: {}", projectId);
         String text = payload.get("text");
         warRoomOrchestrator.injectMessage(projectId, text);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Ends an active debate session and triggers final synthesis.
+     */
+    @PostMapping("/{projectId}/end")
+    public ResponseEntity<Void> endDebate(@PathVariable UUID projectId) {
+        log.info("Ending debate for project id: {}", projectId);
+        warRoomOrchestrator.endDebate(projectId);
         return ResponseEntity.ok().build();
     }
 }

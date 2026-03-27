@@ -2,6 +2,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Final Report loaded');
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = urlParams.get('projectId') || localStorage.getItem('currentProjectId');
+
+    if (projectId) {
+        loadReport(projectId);
+    }
+
+    async function loadReport(pid) {
+        try {
+            const token = localStorage.getItem('authToken');
+            const res = await fetch(`http://localhost:8080/api/reports/project/${pid}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) return;
+            const reports = await res.json();
+            if (reports.length > 0) {
+                const latest = reports[reports.length - 1];
+                const summaryEl = document.getElementById('report-summary');
+                if (summaryEl) summaryEl.textContent = latest.summary;
+
+                const confidenceEl = document.getElementById('confidence-score-text');
+                if (confidenceEl) confidenceEl.textContent = latest.confidenceScore + '%';
+            }
+        } catch (err) {
+            console.error('Failed to load report', err);
+        }
+    }
+
     // Animate Risk bars
     const riskFills = document.querySelectorAll('.risk-fill');
     riskFills.forEach(fill => {

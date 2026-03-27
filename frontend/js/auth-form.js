@@ -208,31 +208,28 @@ document.addEventListener('DOMContentLoaded', () => {
             password: document.getElementById('reg-password').value,
         };
 
-        // ── Mock submit (replace with real API call) ─────────────────────────
-        //
-        // Real implementation:
-        //   const res = await fetch('/api/auth/register', {
-        //       method: 'POST',
-        //       headers: { 'Content-Type': 'application/json' },
-        //       body: JSON.stringify(payload),
-        //   });
-        //   if (!res.ok) {
-        //       const { message } = await res.json();
-        //       showBanner(registerBanner, 'error', message || 'Registration failed.');
-        //       return;
-        //   }
-        //   window.location.href = 'dashboard.html';
-        // ────────────────────────────────────────────────────────────────────
+        // ── Real API call ─────────────────────────
+        try {
+            const res = await fetch('http://localhost:8080/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            if (!res.ok) {
+                const data = await res.json();
+                showBanner(registerBanner, 'error', data.message || 'Registration failed.');
+                return;
+            }
+            const data = await res.json();
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('uid', data.uid);
 
-        console.log('[mock] Register payload:', payload);
-        const submitBtn = registerForm.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Signing up…';
-
-        await mockDelay(900);
-        showBanner(registerBanner, 'success', 'Account created! Redirecting to dashboard…');
-        await mockDelay(1200);
-        window.location.href = 'dashboard.html';
+            showBanner(registerBanner, 'success', 'Account created! Redirecting to dashboard…');
+            await mockDelay(1200);
+            window.location.href = 'dashboard.html';
+        } catch (error) {
+            showBanner(registerBanner, 'error', 'Network error occurred.');
+        }
     });
 
     // ── 6b. Login submit ─────────────────────────────────────────────────────
@@ -251,30 +248,29 @@ document.addEventListener('DOMContentLoaded', () => {
             password: document.getElementById('login-password').value,
         };
 
-        // ── Mock submit (replace with real API call) ─────────────────────────
-        //
-        // Real implementation:
-        //   const res = await fetch('/api/auth/login', {
-        //       method: 'POST',
-        //       headers: { 'Content-Type': 'application/json' },
-        //       body: JSON.stringify(payload),
-        //   });
-        //   if (!res.ok) {
-        //       showBanner(loginBanner, 'error', 'Invalid email or password.');
-        //       return;
-        //   }
-        //   const { token } = await res.json();
-        //   localStorage.setItem('authToken', token);
-        //   window.location.href = 'dashboard.html';
-        // ────────────────────────────────────────────────────────────────────
+        // ── Real API call ─────────────────────────
+        try {
+            const res = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            if (!res.ok) {
+                showBanner(loginBanner, 'error', 'Invalid email or password.');
+                return;
+            }
+            const data = await res.json();
+            localStorage.setItem('authToken', data.token);
+            // Optionally store user ID too if sent back: localStorage.setItem('uid', data.uid);
 
-        console.log('[mock] Login payload:', payload);
-        const submitBtn = loginForm.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Signing in…';
-
-        await mockDelay(700);
-        window.location.href = 'dashboard.html';
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in…';
+            await mockDelay(700);
+            window.location.href = 'dashboard.html';
+        } catch (error) {
+            showBanner(loginBanner, 'error', 'Network error occurred.');
+        }
     });
 
     // ── Utility ──────────────────────────────────────────────────────────────

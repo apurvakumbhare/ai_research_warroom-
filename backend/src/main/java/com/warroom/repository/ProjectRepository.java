@@ -32,6 +32,7 @@ public class ProjectRepository {
     }
 
     public Optional<Project> findById(String id) {
+        if (id == null) return Optional.empty();
         try {
             DocumentSnapshot doc = firestore.collection("projects").document(id).get().get();
             if (doc.exists()) {

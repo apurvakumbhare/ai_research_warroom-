@@ -122,12 +122,28 @@
     min-height: 100vh;
 }
 
+.flex-1 {
+    flex: 1 1 0%;
+}
+
 .overflow-hidden {
     overflow: hidden;
 }
 
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
 .overflow-x-hidden {
     overflow-x: hidden;
+}
+
+.max-w-2xl {
+    max-width: 42rem;
+}
+
+.max-w-3xl {
+    max-width: 48rem;
 }
 
 /* Dashboard Specific Layout */

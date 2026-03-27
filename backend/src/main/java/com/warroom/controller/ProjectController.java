@@ -23,6 +23,7 @@ import java.util.UUID;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final com.google.cloud.firestore.Firestore firestore;
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(@RequestBody ProjectRequest request) {
@@ -62,5 +63,52 @@ public class ProjectController {
     public ResponseEntity<WarRoomResult> runWarRoom(@PathVariable UUID id) {
         log.info("Manually triggering AI debate for project: {}", id);
         return ResponseEntity.ok(projectService.runWarRoom(id));
+    }
+
+    @GetMapping("/{id}/uploads")
+    public ResponseEntity<List<java.util.Map<String, Object>>> getProjectUploads(@PathVariable UUID id) {
+        log.debug("Fetching uploads for project: {}", id);
+        try {
+            java.util.List<com.google.cloud.firestore.QueryDocumentSnapshot> docs = firestore
+                    .collection("projects").document(id.toString()).collection("uploads").get().get().getDocuments();
+            List<java.util.Map<String, Object>> uploads = new java.util.ArrayList<>();
+            for (com.google.cloud.firestore.QueryDocumentSnapshot doc : docs) {
+                java.util.Map<String, Object> data = new java.util.HashMap<>(doc.getData());
+                data.put("id", doc.getId());
+                data.remove("extractedText"); // Do not send full text to frontend table
+
+                if (data.get("uploadedAt") instanceof com.google.cloud.Timestamp) {
+                    com.google.cloud.Timestamp ts = (com.google.cloud.Timestamp) data.get("uploadedAt");
+                    data.put("uploadedAt", ts.toDate().toString());
+                }
+                uploads.add(data);
+            }
+            return ResponseEntity.ok(uploads);
+        } catch (Exception e) {
+            log.error("Failed to fetch uploads for project: {}", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/{id}/uploads/{uploadId}")
+    public ResponseEntity<java.util.Map<String, Object>> getProjectUpload(@PathVariable UUID id, @PathVariable String uploadId) {
+        log.debug("Fetching upload details for project: {}, upload: {}", id, uploadId);
+        try {
+            com.google.cloud.firestore.DocumentSnapshot doc = firestore
+                    .collection("projects").document(id.toString()).collection("uploads").document(uploadId).get().get();
+            if (!doc.exists()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            java.util.Map<String, Object> data = new java.util.HashMap<>(doc.getData());
+            data.put("id", doc.getId());
+            if (data.get("uploadedAt") instanceof com.google.cloud.Timestamp) {
+                com.google.cloud.Timestamp ts = (com.google.cloud.Timestamp) data.get("uploadedAt");
+                data.put("uploadedAt", ts.toDate().toString());
+            }
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            log.error("Failed to fetch upload {} for project: {}", uploadId, id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

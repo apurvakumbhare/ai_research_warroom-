@@ -21,4 +21,5 @@ public class AgentMessage {
     private String time;
     private String content;
     private String align;
+    private String modelName;
 }

@@ -29,19 +29,75 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Optional: check for project name, but navigate anyway for smooth demo
             const projectName = document.getElementById('project-name').value;
-            console.log('Starting debate for project:', projectName || 'Unnamed Project');
+            const coreHypothesis = document.getElementById('hypothesis').value;
 
-            // Navigate to debate page after a short purely visual delay
+            if (!projectName || !coreHypothesis) {
+                alert("Please provide both Project Name and Core Hypothesis.");
+                return;
+            }
+
             const submitBtn = form.querySelector('button[type="submit"]');
-            if (submitBtn) submitBtn.textContent = 'Launching...';
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined spin" style="animation: spin 1s linear infinite;">sync</span> Launching...';
+            submitBtn.disabled = true;
 
-            setTimeout(() => {
-                window.location.href = 'debate.html';
-            }, 500);
+            try {
+                // 1. Create Project
+                const token = localStorage.getItem('authToken');
+                const response = await fetch('http://localhost:8080/api/projects', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ projectName, coreHypothesis, type: 'RESEARCH' })
+                });
+
+                if (!response.ok) throw new Error('Failed to create project');
+                const project = await response.json();
+                const projectId = project.id;
+
+                // Save to localStorage for debate page
+                localStorage.setItem('currentProjectId', projectId);
+
+                // 2. Upload Files
+                const dropzoneFiles = document.getElementById('file-input').files;
+                const intelFile = document.getElementById('intel-file-input').files[0];
+
+                const uploadPromises = [];
+                const uploadFileObj = async (file) => {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('projectId', projectId);
+                    const uid = localStorage.getItem('uid');
+                    if (uid) {
+                        formData.append('uploadedBy', uid);
+                    }
+                    const token = localStorage.getItem('authToken');
+                    return fetch(`http://localhost:8080/api/upload`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        body: formData
+                    });
+                };
+
+                for (let file of dropzoneFiles) {
+                    uploadPromises.push(uploadFileObj(file));
+                }
+                if (intelFile) {
+                    uploadPromises.push(uploadFileObj(intelFile));
+                }
+
+                await Promise.all(uploadPromises);
+
+                // 3. Navigate
+                window.location.href = `debate.html?projectId=${projectId}`;
+            } catch (err) {
+                console.error(err);
+                alert("Error starting project: " + err.message);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
         });
     }
 

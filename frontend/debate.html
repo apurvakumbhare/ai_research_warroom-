@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         .timeline {
             display: flex;
@@ -40,10 +42,296 @@
             background: var(--primary);
             transition: width 0.3s ease;
         }
+
+        /* ── Pause Banner ───────────────────────────────────── */
+        #pause-banner {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1.25rem;
+            background: linear-gradient(90deg, #92400e, #b45309, #92400e);
+            background-size: 200% 100%;
+            animation: bannerSlide 3s linear infinite;
+            color: #fef3c7;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            z-index: 40;
+        }
+        #pause-banner.visible { display: flex; }
+        #pause-banner .resume-inline-btn {
+            background: #fef3c7;
+            color: #92400e;
+            border: none;
+            border-radius: 8px;
+            padding: 2px 12px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #pause-banner .resume-inline-btn:hover { background: #fde68a; }
+
+        @keyframes bannerSlide {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        /* ── Pause button state ─────────────────────────────── */
+        #pause-btn[aria-pressed="true"] {
+            background: #d97706;
+            border-color: #d97706;
+            color: white;
+        }
+        #pause-btn[aria-pressed="true"]:hover { background: #b45309; }
+        #pause-btn { transition: background 0.2s, border-color 0.2s; }
+
+        /* ── Jump-to-latest pill ────────────────────────────── */
+        #jump-banner {
+            display: none;
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 999px;
+            padding: 0.45rem 1.25rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 50;
+            gap: 0.4rem;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+            border: none;
+            animation: jumpBounce 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            white-space: nowrap;
+        }
+        #jump-banner.visible { display: flex; }
+        #jump-banner:hover { background: #334155; }
+        @keyframes jumpBounce {
+            0%   { opacity: 0; transform: translateX(-50%) translateY(12px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ── Throttle Panel ─────────────────────────────────── */
+        .throttle-panel {
+            margin-top: 1rem;
+            padding: 0.875rem;
+            background: #f8fafc;
+            border-radius: 0.875rem;
+            border: 1px solid var(--slate-200);
+        }
+        .throttle-panel h4 {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--slate-500);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .throttle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            gap: 0.5rem;
+        }
+        .throttle-row label {
+            font-size: 11px;
+            color: var(--slate-600);
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .throttle-row input[type="range"] {
+            flex: 1;
+            accent-color: var(--primary, #4285F4);
+            cursor: pointer;
+        }
+        .throttle-row .val-badge {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary, #4285F4);
+            min-width: 36px;
+            text-align: right;
+        }
+        .throttle-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.25rem;
+        }
+        .throttle-toggle label { font-size: 11px; color: var(--slate-600); font-weight: 600; }
+        /* Switch */
+        .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider-sw { position: absolute; cursor: pointer; inset: 0; background: #cbd5e1; border-radius: 18px; transition: 0.3s; }
+        .slider-sw::before { content: ""; position: absolute; height: 12px; width: 12px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+        input:checked + .slider-sw { background: #4285F4; }
+        input:checked + .slider-sw::before { transform: translateX(16px); }
+
+        /* ── Ended state ────────────────────────────────────── */
+        #ended-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(15,23,42,0.55);
+            backdrop-filter: blur(4px);
+            z-index: 30;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            color: white;
+            text-align: center;
+        }
+        #ended-overlay.visible { display: flex; }
+        #ended-overlay h3 { font-size: 1.25rem; font-weight: 800; }
+        #ended-overlay p  { font-size: 0.875rem; opacity: 0.8; }
+        #ended-overlay .dl-btn {
+            margin-top: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            background: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        #ended-overlay .dl-btn:hover { background: #3367d6; }
+
+        /* ── File Viewer Overlay ────────────────────────────── */
+        #file-viewer-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(15,23,42,0.65);
+            backdrop-filter: blur(6px);
+            z-index: 60;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        #file-viewer-overlay.visible { display: flex; }
+        .file-viewer-card {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            max-height: 100%;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .file-viewer-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--slate-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--slate-50);
+        }
+        .file-viewer-title {
+            font-weight: 800;
+            color: var(--slate-800);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .file-viewer-close {
+            background: none;
+            border: none;
+            color: var(--slate-500);
+            cursor: pointer;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .file-viewer-close:hover { background: var(--slate-200); color: var(--slate-800); }
+        .file-viewer-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--slate-700);
+            white-space: pre-wrap;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #ended-overlay .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #ended-overlay .close-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* Custom scrollbar for intel panel */
+        #project-intel-list::-webkit-scrollbar { width: 4px; }
+        #project-intel-list::-webkit-scrollbar-track { background: transparent; }
+        #project-intel-list::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 4px; }
+        #project-intel-list::-webkit-scrollbar-thumb:hover { background: var(--slate-400); }
+
+        /* ── Toast notification ─────────────────────────────── */
+        #toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.65rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        #toast.show { opacity: 1; transform: translateY(0); }
+
+        /* ── Timeline container positioning for jump banner ─── */
+        .timeline-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
 <body class="bg-background-light">
+    <!-- Toast -->
+    <div id="toast" role="status" aria-live="polite"></div>
+
     <!-- Header -->
     <header class="h-16 flex items-center justify-between px-6 border-b z-50 bg-white/80 backdrop-blur-md sticky top-0">
         <div class="flex items-center gap-8">
@@ -74,30 +362,18 @@
                     style="font-size: 0.875rem; font-weight: 800; color: var(--driftwood); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
                     <span class="material-symbols-outlined" style="font-size: 18px;">folder_open</span> Project Intel
                 </h3>
-                <p style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
-                    Context: AGI Safety</p>
+                <p id="project-hypothesis-text"
+                    style="font-size: 0.625rem; font-weight: 700; color: var(--slate-400); text-transform: uppercase;">
+                    Context: Loading...</p>
             </div>
 
-            <div id="project-intel-list" class="space-y-4 overflow-y-auto">
-                <div class="p-3 card" style="border-radius: 0.75rem;">
-                    <div class="flex justify-between mb-1">
-                        <span class="badge badge-blue" style="font-size: 10px;">PAPER</span>
-                        <span style="font-size: 10px; color: var(--slate-400);">2h ago</span>
-                    </div>
-                    <h4 style="font-size: 0.875rem; font-weight: 700;">Scaling Laws for Neural Models</h4>
-                    <p
-                        style="font-size: 0.75rem; color: var(--slate-500); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                        Predictable benchmarks for model performance.</p>
-                </div>
-                <div class="p-3 card" style="border-radius: 0.75rem;">
-                    <div class="flex justify-between mb-1">
-                        <span class="badge"
-                            style="background: var(--sand-200); color: var(--driftwood); font-size: 10px;">DATASET</span>
-                        <span style="font-size: 10px; color: var(--slate-400);">Yesterday</span>
-                    </div>
-                    <h4 style="font-size: 0.875rem; font-weight: 700;">Human-in-the-loop Metrics</h4>
-                    <p style="font-size: 0.75rem; color: var(--slate-500);">Expert preference feedback nodes.</p>
-                </div>
+            <div id="project-intel-list" class="space-y-4 overflow-y-auto" style="max-height: calc(100vh - 280px); padding-right: 4px;">
+                <!-- dynamic intel list will be loaded here -->
+            </div>
+
+            <div style="margin-top: 1rem; padding: 0.5rem; background: var(--slate-50); border-radius: 6px; font-size: 9px; color: var(--slate-500); line-height: 1.4; border: 1px solid var(--slate-200);">
+                <span class="material-symbols-outlined" style="font-size: 11px; vertical-align: text-bottom;">lock</span>
+                Files are securely processed for AI context and strictly scoped to this project.
             </div>
 
             <button id="upload-intel-btn"
@@ -106,109 +382,241 @@
                 onmouseout="this.style.backgroundColor='transparent'">
                 <span class="material-symbols-outlined" style="font-size: 20px;">add_circle</span> Upload Intel
             </button>
-            <input type="file" id="intel-file-input" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.txt"
-                style="display: none;">
+            <input type="file" id="intel-file-input" accept=".pdf"
+                style="display:none;" />
         </aside>
 
         <!-- Center Panel: Timeline -->
-        <section class="flex flex-col overflow-hidden" style="background: var(--slate-50);">
-            <header class="p-4 bg-white border-b flex justify-between items-center">
+        <section class="flex flex-col overflow-hidden" style="background: var(--slate-50); min-height: 0;">
+            <!-- Center header with controls -->
+            <header class="p-4 bg-white border-b flex justify-between items-center" style="flex-shrink:0;">
                 <div>
-                    <h2 style="font-size: 1.125rem; font-weight: 800;">Live Debate: Session Alpha</h2>
+                    <h2 id="debate-session-title" style="font-size: 1.125rem; font-weight: 800;">Live Debate: Loading...
+                    </h2>
                     <div class="flex items-center gap-2 mt-1">
                         <span class="pulse"></span>
-                        <span style="font-size: 12px; color: var(--slate-500);">Topic: Interpretability vs.
-                            Efficiency</span>
+                        <span id="debate-topic-text" style="font-size: 12px; color: var(--slate-500);">Topic:
+                            Loading...</span>
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <button id="pause-btn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">PAUSE</button>
-                    <button class="btn btn-primary" style="padding: 0.5rem 1rem;"
-                        onclick="window.location.href='report_view.html'">FINISH & REPORT</button>
+                    <button id="pause-btn"
+                        class="btn btn-secondary"
+                        style="padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.4rem;"
+                        aria-pressed="false"
+                        aria-label="Pause debate">
+                        <span class="material-symbols-outlined" style="font-size:16px;" id="pause-icon">pause</span>
+                        <span id="pause-label">PAUSE</span>
+                    </button>
+                    <button id="end-chat-btn"
+                        class="btn btn-primary"
+                        style="padding: 0.5rem 1rem; background: #dc2626; border-color: #dc2626; display: flex; align-items: center; gap: 0.4rem;"
+                        aria-label="End debate and download summary">
+                        <span class="material-symbols-outlined" style="font-size:16px;">stop_circle</span>
+                        <span>END CHAT</span>
+                    </button>
                 </div>
             </header>
 
-            <!-- Debate Timeline -->
-            <div class="flex-1 overflow-y-auto p-6" id="debate-timeline">
-                <div class="timeline" id="timeline-container">
-                    <!-- Messages will be injected here -->
+            <!-- Pause Banner -->
+            <div id="pause-banner"
+                role="status"
+                aria-live="polite"
+                aria-label="Debate is paused">
+                <span class="material-symbols-outlined" style="font-size:18px;">pause_circle</span>
+                ⏸ Debate Paused — AI agents are holding.
+                <button class="resume-inline-btn" id="resume-inline-btn" aria-label="Resume debate">RESUME</button>
+            </div>
+
+            <!-- Timeline + Jump banner wrapper -->
+            <div class="timeline-wrapper">
+                <!-- Debate Timeline -->
+                <div class="flex-1 overflow-y-auto p-6" id="debate-timeline"
+                    role="log"
+                    aria-label="Debate conversation"
+                    aria-live="polite">
+                    <div class="timeline" id="timeline-container">
+                        <!-- Messages injected here -->
+                    </div>
                 </div>
+
+                <!-- Ended overlay -->
+                <div id="ended-overlay" role="dialog" aria-modal="true" aria-labelledby="ended-title">
+                    <button class="close-btn" id="dismiss-overlay-btn" aria-label="Close summary overlay">
+                        <span class="material-symbols-outlined" style="font-size:20px;">close</span>
+                    </button>
+                    <span class="material-symbols-outlined" style="font-size:48px; opacity:0.8;">check_circle</span>
+                    <h3 id="ended-title">Debate Concluded</h3>
+                    <p>The summary has been generated and downloaded as a PDF.</p>
+                    <button class="dl-btn" id="redownload-btn" aria-label="Re-download debate summary PDF">
+                        <span class="material-symbols-outlined" style="font-size:18px;">download</span>
+                        Re-download Summary
+                    </button>
+                </div>
+
+                <!-- File Viewer Overlay -->
+                <div id="file-viewer-overlay" role="dialog" aria-modal="true" aria-labelledby="file-viewer-title">
+                    <div class="file-viewer-card">
+                        <div class="file-viewer-header">
+                            <h3 class="file-viewer-title">
+                                <span class="material-symbols-outlined" style="color:var(--primary);">description</span>
+                                <span id="file-viewer-title">Document Name</span>
+                            </h3>
+                            <button class="file-viewer-close" id="file-viewer-close-btn" aria-label="Close file viewer">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div class="file-viewer-body" id="file-viewer-content">
+                            Loading document content...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jump to latest pill -->
+                <button id="jump-banner"
+                    aria-label="Jump to latest messages"
+                    title="New messages below">
+                    <span class="material-symbols-outlined" style="font-size:14px;">arrow_downward</span>
+                    New messages — Jump to latest
+                </button>
             </div>
 
             <!-- Input area -->
-            <div class="p-4 bg-white border-t flex items-center justify-center">
+            <div class="p-4 bg-white border-t flex items-center justify-center" style="flex-shrink:0;">
                 <div class="flex items-center gap-3 w-full max-w-3xl">
                     <span style="font-size: 24px;">🤖</span>
-                    <input id="inject-input" class="flex-1 border border-slate-400 px-3 py-1.5 text-sm outline-none"
-                        style="color: #1e293b;" placeholder="Inject instruction or a query" type="text">
+                    <input id="inject-input"
+                        class="flex-1 border border-slate-400 px-3 py-1.5 text-sm outline-none"
+                        style="color: #1e293b; border-radius: 8px;"
+                        placeholder="Inject instruction or a query"
+                        type="text"
+                        aria-label="Inject a message into the debate">
                     <button id="inject-btn"
                         style="background-color: #abc9e3; border-radius: 16px; padding: 0.5rem 1.5rem; font-weight: 700; color: #0f172a; border: none; cursor: pointer; transition: background-color 0.2s;"
                         onmouseover="this.style.backgroundColor='#9bbdd9'"
-                        onmouseout="this.style.backgroundColor='#abc9e3'">INJECT</button>
+                        onmouseout="this.style.backgroundColor='#abc9e3'"
+                        aria-label="Send injected message">INJECT</button>
                 </div>
             </div>
         </section>
 
         <!-- Right Panel: Agent Status -->
-        <aside class="right-panel flex-col p-6 bg-white border-l">
+        <aside class="right-panel flex-col p-6 bg-white border-l" style="overflow-y:auto;">
             <h3 style="font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
                 <span class="material-symbols-outlined" style="font-size: 18px;">memory</span> Agent Status
             </h3>
 
             <div class="space-y-6" id="agent-status-list">
-                <!-- Agent 1 -->
-                <div class="flex gap-4">
+                <!-- Agent A: Strategist (Gemini) -->
+                <div class="flex gap-4" id="agent-strategist">
                     <div class="relative">
-                        <div class="message-avatar" style="background: var(--ocean); width: 44px; height: 44px;">R</div>
-                        <div class="absolute"
-                            style="bottom: 0; right: 0; width: 10px; height: 10px; background: #22c55e; border: 2px solid #fff; border-radius: 50%;">
-                        </div>
+                        <div class="message-avatar" style="background: #4285F4; width: 44px; height: 44px;">A</div>
+                        <div class="absolute" style="bottom: 0; right: 0; width: 10px; height: 10px; background: #22c55e; border: 2px solid #fff; border-radius: 50%;"></div>
                     </div>
                     <div class="flex-1">
                         <div class="flex justify-between items-center">
-                            <span style="font-size: 0.875rem; font-weight: 700;">Researcher</span>
+                            <span style="font-size: 0.875rem; font-weight: 700;">Strategist</span>
                             <span style="font-size: 9px; color: #22c55e; font-weight: 800;">ACTIVE</span>
                         </div>
-                        <div class="status-bar">
-                            <div class="status-bar-fill" style="width: 85%;"></div>
-                        </div>
-                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">
-                            Searching ArXiv...</p>
+                        <div class="status-bar"><div class="status-bar-fill" style="width: 0%;"></div></div>
+                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">Gemini 2.5 Flash · Pro</p>
                     </div>
                 </div>
 
-                <!-- Agent 2 -->
-                <div class="flex gap-4">
+                <!-- Agent B: Critic (Claude) -->
+                <div class="flex gap-4" id="agent-critic">
                     <div class="relative">
-                        <div class="message-avatar" style="background: var(--driftwood); width: 44px; height: 44px;">C
-                        </div>
-                        <div class="absolute"
-                            style="bottom: 0; right: 0; width: 10px; height: 10px; background: #22c55e; border: 2px solid #fff; border-radius: 50%;">
-                        </div>
+                        <div class="message-avatar" style="background: #D97706; width: 44px; height: 44px;">B</div>
+                        <div class="absolute" style="bottom: 0; right: 0; width: 10px; height: 10px; background: #94a3b8; border: 2px solid #fff; border-radius: 50%;"></div>
                     </div>
                     <div class="flex-1">
                         <div class="flex justify-between items-center">
                             <span style="font-size: 0.875rem; font-weight: 700;">Critic</span>
-                            <span style="font-size: 9px; color: #f59e0b; font-weight: 800;">THINKING</span>
+                            <span style="font-size: 9px; color: #94a3b8; font-weight: 800;">WAITING</span>
                         </div>
-                        <div class="status-bar">
-                            <div class="status-bar-fill" style="width: 40%; background: var(--driftwood);"></div>
+                        <div class="status-bar"><div class="status-bar-fill" style="width: 0%; background: #D97706;"></div></div>
+                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">Claude 3.5 Sonnet · Con</p>
+                    </div>
+                </div>
+
+                <!-- Agent C: Optimizer (OpenAI) -->
+                <div class="flex gap-4" id="agent-optimizer">
+                    <div class="relative">
+                        <div class="message-avatar" style="background: #10A37F; width: 44px; height: 44px;">C</div>
+                        <div class="absolute" style="bottom: 0; right: 0; width: 10px; height: 10px; background: #94a3b8; border: 2px solid #fff; border-radius: 50%;"></div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <span style="font-size: 0.875rem; font-weight: 700;">Optimizer</span>
+                            <span style="font-size: 9px; color: #94a3b8; font-weight: 800;">WAITING</span>
                         </div>
-                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">
-                            Analyzing logic...</p>
+                        <div class="status-bar"><div class="status-bar-fill" style="width: 0%; background: #10A37F;"></div></div>
+                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">GPT-4o-mini · Neutral</p>
+                    </div>
+                </div>
+
+                <!-- Agent D: Architect (Groq/Llama) -->
+                <div class="flex gap-4" id="agent-architect">
+                    <div class="relative">
+                        <div class="message-avatar" style="background: #7C3AED; width: 44px; height: 44px;">D</div>
+                        <div class="absolute" style="bottom: 0; right: 0; width: 10px; height: 10px; background: #94a3b8; border: 2px solid #fff; border-radius: 50%;"></div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <span style="font-size: 0.875rem; font-weight: 700;">Architect</span>
+                            <span style="font-size: 9px; color: #94a3b8; font-weight: 800;">WAITING</span>
+                        </div>
+                        <div class="status-bar"><div class="status-bar-fill" style="width: 0%; background: #7C3AED;"></div></div>
+                        <p style="font-size: 10px; color: var(--slate-400); font-style: italic; margin-top: 2px;">Llama 3.3 70B · Technical</p>
                     </div>
                 </div>
             </div>
 
+            <!-- Throttle Controls -->
+            <div class="throttle-panel" role="group" aria-label="Response throttle settings">
+                <h4>
+                    <span class="material-symbols-outlined" style="font-size:13px;">tune</span>
+                    Throttle Controls
+                </h4>
+
+                <div class="throttle-toggle">
+                    <label for="throttle-enabled">Enable throttling</label>
+                    <label class="switch">
+                        <input type="checkbox" id="throttle-enabled" checked aria-label="Enable response throttling">
+                        <span class="slider-sw"></span>
+                    </label>
+                </div>
+
+                <div style="height: 1px; background: var(--slate-200); margin: 0.6rem 0;"></div>
+
+                <div class="throttle-row">
+                    <label for="delay-slider">Delay</label>
+                    <input type="range" id="delay-slider" min="0" max="5" step="0.5" value="2"
+                        aria-label="Message delay in seconds" aria-valuemin="0" aria-valuemax="5">
+                    <span class="val-badge" id="delay-val">2s</span>
+                </div>
+
+                <div class="throttle-row">
+                    <label for="maxchars-slider">Max chars</label>
+                    <input type="range" id="maxchars-slider" min="200" max="2000" step="100" value="800"
+                        aria-label="Maximum characters per message" aria-valuemin="200" aria-valuemax="2000">
+                    <span class="val-badge" id="maxchars-val">800</span>
+                </div>
+            </div>
+
             <div class="mt-auto p-4" style="background: var(--sand-100); border-radius: 1rem; color: var(--driftwood);">
-                <h4 style="font-size: 10px; font-weight: 800; text-transform: uppercase;">Workspace Health</h4>
+                <h4 style="font-size: 10px; font-weight: 800; text-transform: uppercase;">Debate Info</h4>
                 <div class="flex justify-between text-xs mt-2">
-                    <span>Tokens/Sec</span>
-                    <span style="font-weight: 700;">2.4k</span>
+                    <span>Models</span>
+                    <span style="font-weight: 700;">4 Active</span>
                 </div>
                 <div class="flex justify-between text-xs mt-1">
-                    <span>Consensus</span>
-                    <span style="font-weight: 700;">42%</span>
+                    <span>Rounds</span>
+                    <span style="font-weight: 700;">3 Max</span>
+                </div>
+                <div class="flex justify-between text-xs mt-1">
+                    <span>Grounding</span>
+                    <span style="font-weight: 700;">Document</span>
                 </div>
             </div>
         </aside>
@@ -216,7 +624,7 @@
 
     <script src="js/main.js"></script>
     <script src="js/navigation.js"></script>
-    <script src="js/debate.js"></script>
+    <script src="js/debate.js?v=11"></script>
 </body>
 
 </html>

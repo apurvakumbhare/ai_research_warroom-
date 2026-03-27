@@ -29,10 +29,10 @@ public class AgentOutputRepository {
         return output;
     }
 
-    public List<AgentOutput> findByDebateSessionId(String sessionId) {
+    public List<AgentOutput> findByChatSessionId(String sessionId) {
         try {
             return firestore.collection("agent_outputs")
-                    .whereEqualTo("debateSessionId", sessionId)
+                    .whereEqualTo("chatSessionId", sessionId)
                     .get().get().getDocuments().stream()
                     .map(doc -> doc.toObject(AgentOutput.class))
                     .collect(Collectors.toList());
@@ -41,12 +41,12 @@ public class AgentOutputRepository {
         }
     }
 
-    public List<AgentOutput> findByDebateSessionId(UUID sessionId) {
-        return findByDebateSessionId(sessionId.toString());
+    public List<AgentOutput> findByChatSessionId(UUID sessionId) {
+        return findByChatSessionId(sessionId.toString());
     }
 
-    public List<AgentOutput> findByDebateSessionIdOrderByGeneratedAtAsc(String sessionId) {
-        List<AgentOutput> outputs = findByDebateSessionId(sessionId);
+    public List<AgentOutput> findByChatSessionIdOrderByGeneratedAtAsc(String sessionId) {
+        List<AgentOutput> outputs = findByChatSessionId(sessionId);
         outputs.sort((a, b) -> {
             if (a.getGeneratedAt() == null || b.getGeneratedAt() == null)
                 return 0;

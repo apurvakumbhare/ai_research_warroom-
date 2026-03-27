@@ -5,25 +5,35 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.Date;
+import java.util.List;
 
 /**
- * Enhanced DTO for returning project details, including audit data and status.
+ * DTO for returning project data to the frontend.
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProjectResponse {
-    private UUID id;
+
+    private String id;
+
     private String projectName;
+
     private String coreHypothesis;
+
     private String ownerId;
-    private java.util.List<String> participantIds;
+
+    private List<String> participantIds;
+
     private String type;
+
     private String status;
+
     private String finalContent;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    private Date createdAt;
+
+    private Date updatedAt;
 }

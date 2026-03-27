@@ -2,11 +2,11 @@ package com.warroom.service;
 
 import com.google.cloud.firestore.Firestore;
 import com.warroom.entity.AgentOutput;
-import com.warroom.entity.DebateSession;
+import com.warroom.entity.ChatSession;
 import com.warroom.entity.Project;
 import com.warroom.exception.WarRoomException;
 import com.warroom.repository.AgentOutputRepository;
-import com.warroom.repository.DebateSessionRepository;
+import com.warroom.repository.ChatSessionRepository;
 import com.warroom.repository.ProjectRepository;
 import com.warroom.service.agent.OpenAIClient;
 import com.warroom.service.file.FirebaseStorageService;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReportService {
 
-    private final DebateSessionRepository debateSessionRepository;
+    private final ChatSessionRepository chatSessionRepository;
     private final ProjectRepository projectRepository;
     private final AgentOutputRepository agentOutputRepository;
     private final OpenAIClient openAIClient;
@@ -41,19 +41,21 @@ public class ReportService {
     private final Firestore firestore;
 
     /**
-     * Finalizes the debate session by generating a professional summary,
+     * Finalizes the chat session by generating a professional summary,
      * converting it to a PDF, uploading to Firebase, and recording it in Firestore.
      */
-    public String finalizeReport(UUID debateId) {
-        log.info("Finalizing report for debate: {}", debateId);
+    public String finalizeReport(UUID chatSessionId) {
+        log.info("Finalizing report for chat session: {}", chatSessionId);
 
-        DebateSession session = debateSessionRepository.findById(debateId.toString())
-                .orElseThrow(() -> new WarRoomException("NOT_FOUND", "Debate session not found"));
+        ChatSession session = chatSessionRepository.findById(chatSessionId.toString()).block();
+        if (session == null) {
+            throw new WarRoomException("NOT_FOUND", "Chat session not found");
+        }
 
-        Project project = projectRepository.findById(UUID.fromString(session.getProjectId()))
+        Project project = projectRepository.findById(session.getProjectId())
                 .orElseThrow(() -> new WarRoomException("NOT_FOUND", "Project not found"));
 
-        List<AgentOutput> outputs = agentOutputRepository.findByDebateSessionIdOrderByGeneratedAtAsc(session.getId());
+        List<AgentOutput> outputs = agentOutputRepository.findByChatSessionIdOrderByGeneratedAtAsc(session.getId());
         String debateHistory = outputs.stream()
                 .map(o -> o.getAgentName() + ": " + o.getOutput())
                 .collect(Collectors.joining("\n\n"));
@@ -125,7 +127,7 @@ public class ReportService {
         String reportId = UUID.randomUUID().toString();
         Map<String, Object> reportData = new HashMap<>();
         reportData.put("projectId", project.getId());
-        reportData.put("debateId", session.getId());
+        reportData.put("chatSessionId", session.getId());
         reportData.put("title", "Final Report - " + project.getProjectName());
         reportData.put("summary", summary);
         reportData.put("confidenceScore", confidence);

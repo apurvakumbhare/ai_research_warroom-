@@ -3,7 +3,7 @@ package com.warroom.entity;
 import com.google.cloud.spring.data.firestore.Document;
 import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Entity representing a user-submitted research or startup project.
@@ -33,7 +33,7 @@ public class Project {
 
     private String finalContent;
 
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 }
