@@ -409,7 +409,7 @@
 
                 <div class="divider"><span>Or continue with</span></div>
 
-                <button type="button" class="btn btn-secondary w-full"
+                <button type="button" id="google-signin-btn" class="btn btn-secondary w-full"
                     style="padding: 0.875rem; background: #fff; border: 1px solid var(--slate-200);">
                     <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google"
                         style="width: 20px; height: 20px;">
@@ -431,6 +431,12 @@
 
 
 
+    <!-- Firebase SDK (Compat Version for ease of use in plain HTML/JS) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-init.js"></script>
+    
+    <script>console.log("signin.html reaching end of body");</script>
     <script src="js/auth-form.js"></script>
 </body>
 

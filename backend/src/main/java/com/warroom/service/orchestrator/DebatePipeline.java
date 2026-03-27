@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
 
 /**
  * Multi-model debate pipeline with round-robin turn-taking.
- * Agents: Strategist (Gemini) → Critic (Claude) → Optimizer (OpenAI) → Architect (Groq/Llama)
+ * Agents: Strategist (Gemini) → Critic (Claude) → Optimizer (OpenAI) →
+ * Architect (Groq/Llama)
  * Runs for configurable number of rounds with document grounding.
  */
 @Slf4j
@@ -77,35 +78,45 @@ public class DebatePipeline {
             }
 
             log.info("=== Continuous Turn {} ===", iteration);
-            String history = getFormattedHistory(session.getId());
+            
+            // 1. STRATEGIST (Gemini)
+            try {
+                String history = getFormattedHistory(session.getId());
+                String prompt = PromptTemplates.buildStrategistPrompt(title, hypothesis, documentContext, history);
+                String resp = geminiClient.call(prompt);
+                if (resp != null) saveAgentOutput(session, project, "STRATEGIST", geminiModel, resp, iteration);
+            } catch (Exception e) { log.error("Strategist failed: {}", e.getMessage()); }
+            sleep(1000);
 
-            int randomAgent = random.nextInt(4);
+            // 2. CRITIC (Claude)
+            try {
+                String history = getFormattedHistory(session.getId());
+                String prompt = PromptTemplates.buildCriticPrompt(title, hypothesis, documentContext, history);
+                String resp = claudeClient.call(prompt);
+                if (resp != null) saveAgentOutput(session, project, "CRITIC", claudeModel, resp, iteration);
+            } catch (Exception e) { log.error("Critic failed: {}", e.getMessage()); }
+            sleep(1000);
 
-            if (randomAgent == 0) {
-                log.info("Turn {} - Agent A: Strategist (Gemini) responding...", iteration);
-                String strategistPrompt = PromptTemplates.buildStrategistPrompt(title, hypothesis, documentContext, history);
-                String strategistResponse = geminiClient.call(strategistPrompt);
-                saveAgentOutput(session, project, "STRATEGIST", geminiModel, strategistResponse, iteration);
-            } else if (randomAgent == 1) {
-                log.info("Turn {} - Agent B: Critic (Claude) responding...", iteration);
-                String criticPrompt = PromptTemplates.buildCriticPrompt(title, hypothesis, documentContext, history);
-                String criticResponse = claudeClient.call(criticPrompt);
-                saveAgentOutput(session, project, "CRITIC", claudeModel, criticResponse, iteration);
-            } else if (randomAgent == 2) {
-                log.info("Turn {} - Agent C: Optimizer (OpenAI) responding...", iteration);
-                String optimizerPrompt = PromptTemplates.buildOptimizerPrompt(title, hypothesis, documentContext, history);
-                String optimizerResponse = openAIClient.call(optimizerPrompt);
-                saveAgentOutput(session, project, "OPTIMIZER", "gpt-4o-mini", optimizerResponse, iteration);
-            } else {
-                log.info("Turn {} - Agent D: Architect (Groq/Llama) responding...", iteration);
-                String architectPrompt = PromptTemplates.buildArchitectPrompt(title, hypothesis, documentContext, history);
-                String architectResponse = groqClient.call(architectPrompt);
-                saveAgentOutput(session, project, "ARCHITECT", groqModel, architectResponse, iteration);
-            }
+            // 3. OPTIMIZER (OpenAI)
+            try {
+                String history = getFormattedHistory(session.getId());
+                String prompt = PromptTemplates.buildOptimizerPrompt(title, hypothesis, documentContext, history);
+                String resp = openAIClient.call(prompt);
+                if (resp != null) saveAgentOutput(session, project, "OPTIMIZER", "gpt-4o-mini", resp, iteration);
+            } catch (Exception e) { log.error("Optimizer failed: {}", e.getMessage()); }
+            sleep(1000);
 
+            // 4. ARCHITECT (Groq/Llama)
+            try {
+                String history = getFormattedHistory(session.getId());
+                String prompt = PromptTemplates.buildArchitectPrompt(title, hypothesis, documentContext, history);
+                String resp = groqClient.call(prompt);
+                if (resp != null) saveAgentOutput(session, project, "ARCHITECT", groqModel, resp, iteration);
+            } catch (Exception e) { log.error("Architect failed: {}", e.getMessage()); }
+            
             iteration++;
-            // Random delay between 4 to 8 seconds to pace the debate and allow user interaction
-            sleep(4000 + random.nextInt(4000));
+            // Natural pause between rounds
+            sleep(2000);
         }
 
         // Final Synthesis (using OpenAI)
@@ -144,17 +155,29 @@ public class DebatePipeline {
         } catch (Exception e) {
             log.warn("Failed to fetch document context for project {}: {}", project.getId(), e.getMessage());
         }
+
+        // Truncate to ~15k characters to protect prompt token limits
+        if (extractedContext.length() > 15000) {
+            log.info("Truncating document context for project {} (original length: {})", project.getId(),
+                    extractedContext.length());
+            return extractedContext.substring(0, 15000) + "... [Truncated for prompt limit]";
+        }
         return extractedContext.toString();
     }
 
     private void saveAgentOutput(ChatSession session, Project project, String role, String modelName,
             String output, int iteration) {
+
+        String finalOutput = (output == null || output.trim().isEmpty())
+                ? "[The AI agent returned an empty or whitespace-only response. This often happens due to content safety filters or token limit refusals.]"
+                : output;
+
         AgentOutput agentOutput = AgentOutput.builder()
                 .chatSessionId(session.getId())
                 .projectId(project.getId())
                 .agentName(role)
                 .modelName(modelName)
-                .output(output)
+                .output(finalOutput)
                 .iteration(iteration)
                 .generatedAt(LocalDateTime.now().toString())
                 .build();

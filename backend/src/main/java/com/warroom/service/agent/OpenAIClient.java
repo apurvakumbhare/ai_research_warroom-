@@ -27,11 +27,14 @@ public class OpenAIClient {
         try {
             return chatClient.prompt()
                     .user(prompt)
+                    .options(org.springframework.ai.openai.OpenAiChatOptions.builder()
+                            .withMaxTokens(500)
+                            .build())
                     .call()
                     .content();
         } catch (Exception e) {
             log.error("Failed to call OpenAI: {}", e.getMessage());
-            throw new RuntimeException("AI_SERVICE_UNAVAILABLE", e);
+            return "[OpenAI API error: " + e.getMessage() + "]";
         }
     }
 }

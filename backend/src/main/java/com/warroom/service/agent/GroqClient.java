@@ -41,7 +41,7 @@ public class GroqClient {
         Map<String, Object> body = Map.of(
                 "model", model,
                 "messages", List.of(userMessage),
-                "max_tokens", 3000,
+                "max_tokens", 500, // Reduced for speed and conciseness
                 "temperature", 0.7
         );
 

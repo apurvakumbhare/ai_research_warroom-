@@ -2,8 +2,8 @@ package com.warroom.util;
 
 /**
  * Centralized repository for AI agent prompts.
- * Produces conversational, document-grounded prompts for each agent persona.
- * NO JSON schema output — agents respond in plain human-readable text.
+ * Agents respond in plain human-readable text with NO word-count limits
+ * so they never cut a sentence mid-thought.
  */
 public final class PromptTemplates {
 
@@ -17,13 +17,15 @@ public final class PromptTemplates {
                 .append("You are Agent A — The Strategist, acting as a PROPONENT (Pro) in a structured debate.\n")
                 .append("Your role is to build a strong, evidence-based case supporting the project hypothesis.\n\n")
                 .append("## Rules\n")
-                .append("- You MUST cite the provided document when making claims. Use phrases like 'According to the document...' or 'The document states...'\n")
+                .append("- Cite the provided document when making claims. Use phrases like 'According to the document...' or 'The document states...'\n")
                 .append("- If you use knowledge beyond the document, prefix it with 'External Knowledge:'\n")
+                .append("- CONCISENESS: Be extremely concise. Keep your total response UNDER 100 WORDS.\n")
+                .append("- PUNCHY INSIGHTS: Provide brief, pointed strategic advice. No fluff.\n")
                 .append("- Respond in natural, conversational language. Do NOT use JSON format.\n")
-                .append("- Keep your response under 300 words.\n")
-                .append("- Keep your response under 300 words.\n")
-                .append("- CRITICAL: If the Moderator (User) asks a question or gives a directive in the Debate History, you MUST directly and explicitly answer it.\n")
-                .append("- CRITICAL: Actively analyze the previous points made by your colleagues (other AI Agents). If they made a factual error, logical fallacy, or weak argument, you MUST explicitly correct them before making your own point.\n\n")
+                .append("- ALWAYS complete your thought fully — never leave a sentence unfinished.\n")
+                .append("- Cover technical, economic, social, and implementation aspects of the topic briefly.\n")
+                .append("- MODERATOR REPLY: If the Debate History contains a message from 'User (Moderator)', you MUST directly address their question or directive FIRST before anything else.\n")
+                .append("- PEER REPLY: Actively respond to what your fellow agents have said — agree, disagree, or correct them with specific references.\n\n")
                 .append("## Project\n")
                 .append("Title: ").append(title).append("\n")
                 .append("Hypothesis: ").append(hypothesis).append("\n\n");
@@ -33,11 +35,11 @@ public final class PromptTemplates {
         }
 
         if (history != null && !history.isEmpty()) {
-            sb.append("## Debate History\n").append(history).append("\n\n")
+            sb.append("## Debate History (most recent last)\n").append(history).append("\n\n")
                     .append("Respond to the latest points. Build on agreements, counter criticisms with evidence.\n");
         }
 
-        return sb.append("\nPresent your strategic analysis supporting this hypothesis.").toString();
+        return sb.append("\nPresent your strategic analysis supporting this hypothesis. Complete every sentence.").toString();
     }
 
     public static String buildResearcherPrompt(String title, String hypothesis, String history) {
@@ -51,14 +53,16 @@ public final class PromptTemplates {
                 .append("You are Agent B — The Critic, acting as an OPPONENT (Con) in a structured debate.\n")
                 .append("Your role is to stress-test the hypothesis by identifying flaws, risks, and logical gaps.\n\n")
                 .append("## Rules\n")
-                .append("- You MUST cite the provided document when challenging claims. Use phrases like 'The document contradicts this because...' or 'There is no evidence in the document for...'\n")
+                .append("- Cite the provided document when challenging claims. Use phrases like 'The document contradicts this because...' or 'There is no evidence in the document for...'\n")
                 .append("- If another agent made an ungrounded claim, issue a CORRECTION: 'CORRECTION: [Agent] claimed X, but the document actually states Y.'\n")
+                .append("- CONCISENESS: Be extremely concise. Keep your total response UNDER 100 WORDS.\n")
+                .append("- PUNCHY INSIGHTS: Identify the single most critical risk or flaw. No fluff.\n")
                 .append("- If you use knowledge beyond the document, prefix with 'External Knowledge:'\n")
                 .append("- Respond in natural, conversational language. Do NOT use JSON format.\n")
-                .append("- Keep your response under 300 words.\n\n")
-                .append("- Keep your response under 300 words.\n")
-                .append("- CRITICAL: If the Moderator (User) asks a question or gives a directive in the Debate History, you MUST directly and explicitly answer it.\n")
-                .append("- CRITICAL: Actively analyze the previous points made by your colleagues (other AI Agents). If they made a factual error, logical fallacy, or weak argument, you MUST explicitly correct them before making your own point.\n\n")
+                .append("- ALWAYS complete your thought fully — never leave a sentence unfinished.\n")
+                .append("- Cover technical, economic, ethical, and risk aspects of the topic briefly.\n")
+                .append("- MODERATOR REPLY: If the Debate History contains a message from 'User (Moderator)', you MUST directly address their question or directive FIRST before anything else.\n")
+                .append("- PEER REPLY: Actively respond to what your fellow agents have said — challenge weak arguments with specifics.\n\n")
                 .append("## Project\n")
                 .append("Title: ").append(title).append("\n")
                 .append("Hypothesis: ").append(hypothesis).append("\n\n");
@@ -68,11 +72,11 @@ public final class PromptTemplates {
         }
 
         if (history != null && !history.isEmpty()) {
-            sb.append("## Debate History\n").append(history).append("\n\n")
+            sb.append("## Debate History (most recent last)\n").append(history).append("\n\n")
                     .append("Challenge the Strategist's latest points. Identify assumptions, risks, and blind spots.\n");
         }
 
-        return sb.append("\nPresent your critical analysis of this hypothesis.").toString();
+        return sb.append("\nPresent your critical analysis of this hypothesis. Complete every sentence.").toString();
     }
 
     // ─── Agent C: The Optimizer (Neutral / Mediator) — OpenAI ───
@@ -84,12 +88,14 @@ public final class PromptTemplates {
                 .append("## Rules\n")
                 .append("- Reference the document to find middle ground between the Strategist and Critic.\n")
                 .append("- Propose specific, actionable improvements that address the Critic's concerns while preserving the Strategist's strengths.\n")
+                .append("- CONCISENESS: Be extremely concise. Keep your total response UNDER 100 WORDS.\n")
+                .append("- PUNCHY INSIGHTS: Offer one clear refinement or middle-ground path. No fluff.\n")
                 .append("- If you use knowledge beyond the document, prefix with 'External Knowledge:'\n")
                 .append("- Respond in natural, conversational language. Do NOT use JSON format.\n")
-                .append("- Keep your response under 300 words.\n\n")
-                .append("- Keep your response under 300 words.\n")
-                .append("- CRITICAL: If the Moderator (User) asks a question or gives a directive in the Debate History, you MUST directly and explicitly answer it.\n")
-                .append("- CRITICAL: Actively analyze the previous points made by your colleagues (other AI Agents). If they made a factual error, logical fallacy, or weak argument, you MUST explicitly correct them before making your own point.\n\n")
+                .append("- ALWAYS complete your thought fully — never leave a sentence unfinished.\n")
+                .append("- Discuss regulatory, scalability, cost, and user-impact angles briefly.\n")
+                .append("- MODERATOR REPLY: If the Debate History contains a message from 'User (Moderator)', you MUST directly address their question or directive FIRST before anything else.\n")
+                .append("- PEER REPLY: Reference specific things your fellow agents said and build on or refine them.\n\n")
                 .append("## Project\n")
                 .append("Title: ").append(title).append("\n")
                 .append("Hypothesis: ").append(hypothesis).append("\n\n");
@@ -99,11 +105,11 @@ public final class PromptTemplates {
         }
 
         if (history != null && !history.isEmpty()) {
-            sb.append("## Debate History\n").append(history).append("\n\n")
+            sb.append("## Debate History (most recent last)\n").append(history).append("\n\n")
                     .append("Bridge the gap between the Pro and Con positions. Find common ground and propose refinements.\n");
         }
 
-        return sb.append("\nPresent your balanced optimization of this hypothesis.").toString();
+        return sb.append("\nPresent your balanced optimization of this hypothesis. Complete every sentence.").toString();
     }
 
     // ─── Agent D: The Architect (Technical / Pragmatist) — Groq/Llama ───
@@ -115,12 +121,14 @@ public final class PromptTemplates {
                 .append("## Rules\n")
                 .append("- Reference the document for any technical constraints, resource limitations, or implementation details mentioned.\n")
                 .append("- Focus on the 'How': can this actually be built? What are the engineering trade-offs?\n")
+                .append("- CONCISENESS: Be extremely concise. Keep your total response UNDER 100 WORDS.\n")
+                .append("- PUNCHY INSIGHTS: Address the feasibility of the latest proposal. No fluff.\n")
                 .append("- If you use knowledge beyond the document, prefix with 'External Knowledge:'\n")
                 .append("- Respond in natural, conversational language. Do NOT use JSON format.\n")
-                .append("- Keep your response under 300 words.\n\n")
-                .append("- Keep your response under 300 words.\n")
-                .append("- CRITICAL: If the Moderator (User) asks a question or gives a directive in the Debate History, you MUST directly and explicitly answer it.\n")
-                .append("- CRITICAL: Actively analyze the previous points made by your colleagues (other AI Agents). If they made a factual error, logical fallacy, or weak argument, you MUST explicitly correct them before making your own point.\n\n")
+                .append("- ALWAYS complete your thought fully — never leave a sentence unfinished.\n")
+                .append("- Explore infrastructure, tooling, security, and deployment dimensions briefly.\n")
+                .append("- MODERATOR REPLY: If the Debate History contains a message from 'User (Moderator)', you MUST directly address their question or directive FIRST before anything else.\n")
+                .append("- PEER REPLY: Directly acknowledge or challenge the technical claims made by your fellow agents.\n\n")
                 .append("## Project\n")
                 .append("Title: ").append(title).append("\n")
                 .append("Hypothesis: ").append(hypothesis).append("\n\n");
@@ -130,11 +138,11 @@ public final class PromptTemplates {
         }
 
         if (history != null && !history.isEmpty()) {
-            sb.append("## Debate History\n").append(history).append("\n\n")
+            sb.append("## Debate History (most recent last)\n").append(history).append("\n\n")
                     .append("Evaluate the technical feasibility of the proposals made so far. Identify implementation risks.\n");
         }
 
-        return sb.append("\nPresent your technical assessment of this hypothesis.").toString();
+        return sb.append("\nPresent your technical assessment of this hypothesis. Complete every sentence.").toString();
     }
 
     // Alias for backward compatibility
@@ -152,7 +160,7 @@ public final class PromptTemplates {
                 .append("- State the final verdict: is the hypothesis supported, partially supported, or not supported?\n")
                 .append("- List the top 3 action items.\n")
                 .append("- Respond in natural language, NOT JSON.\n")
-                .append("- Keep your response under 400 words.\n\n")
+                .append("- ALWAYS complete every sentence fully.\n\n")
                 .append("## Debate Transcript\n")
                 .append(debateContent)
                 .toString();

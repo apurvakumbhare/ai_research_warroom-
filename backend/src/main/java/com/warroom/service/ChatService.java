@@ -36,46 +36,56 @@ public class ChatService {
     private final com.google.cloud.firestore.Firestore firestore;
 
     public ChatSessionDto getStatus(String chatSessionId) {
-        ChatSession session = chatSessionRepository.findById(chatSessionId).block();
-        if (session == null) {
-            List<ChatSession> sessions = chatSessionRepository.findByProjectId(chatSessionId).collectList().block();
-            if (sessions != null && !sessions.isEmpty()) {
-                session = sessions.get(sessions.size() - 1);
+        try {
+            ChatSession session = chatSessionRepository.findById(chatSessionId).block();
+            if (session == null) {
+                List<ChatSession> sessions = chatSessionRepository.findByProjectId(chatSessionId).collectList().block();
+                if (sessions != null && !sessions.isEmpty()) {
+                    session = sessions.get(sessions.size() - 1);
+                }
             }
+            if (session == null) {
+                return ChatSessionDto.builder().status("NOT_STARTED").build();
+            }
+            return mapToDto(session, false);
+        } catch (Exception e) {
+            log.error("Failed to get status for session {}: {}", chatSessionId, e.getMessage());
+            return ChatSessionDto.builder().status("ERROR").chatSessionId(chatSessionId).build();
         }
-        if (session == null) {
-            return ChatSessionDto.builder().status("NOT_STARTED").build();
-        }
-        return mapToDto(session, false);
     }
 
     public ChatSessionDto startChat(String chatSessionId) {
-        ChatSession session = chatSessionRepository.findById(chatSessionId).block();
-        if (session == null) {
-            List<ChatSession> sessions = chatSessionRepository.findByProjectId(chatSessionId).collectList().block();
-            if (sessions != null && !sessions.isEmpty()) {
-                session = sessions.get(sessions.size() - 1);
+        try {
+            ChatSession session = chatSessionRepository.findById(chatSessionId).block();
+            if (session == null) {
+                List<ChatSession> sessions = chatSessionRepository.findByProjectId(chatSessionId).collectList().block();
+                if (sessions != null && !sessions.isEmpty()) {
+                    session = sessions.get(sessions.size() - 1);
+                }
             }
+            if (session != null && !"FAILED".equals(session.getStatus())) {
+                return mapToDto(session, false); // Already started
+            }
+            
+            // When frontend invokes this, chatSessionId is usually actually a Project ID for the FIRST session.
+            Project project = projectRepository.findById(chatSessionId).orElseThrow(
+                    () -> new WarRoomException("PROJECT_NOT_FOUND", "Project not found: " + chatSessionId));
+            
+            session = ChatSession.builder()
+                    .projectId(project.getId())
+                    .title(project.getProjectName())
+                    .status("STARTED")
+                    .isEnded(false)
+                    .createdAt(new Date())
+                    .build();
+            session = chatSessionRepository.save(session).block();
+            
+            warRoomOrchestrator.startOrchestration(UUID.fromString(project.getId()));
+            return mapToDto(session, false);
+        } catch (Exception e) {
+            log.error("Failed to start chat for session {}: {}", chatSessionId, e.getMessage());
+            throw new WarRoomException("START_FAILED", "Failed into initiate debate: " + e.getMessage());
         }
-        if (session != null && !"FAILED".equals(session.getStatus())) {
-            return mapToDto(session, false); // Already started
-        }
-        
-        // When frontend invokes this, chatSessionId is usually actually a Project ID for the FIRST session.
-        Project project = projectRepository.findById(chatSessionId).orElseThrow(
-                () -> new WarRoomException("PROJECT_NOT_FOUND", "Project not found: " + chatSessionId));
-        
-        session = ChatSession.builder()
-                .projectId(project.getId())
-                .title(project.getProjectName())
-                .status("STARTED")
-                .isEnded(false)
-                .createdAt(new Date())
-                .build();
-        session = chatSessionRepository.save(session).block();
-        
-        warRoomOrchestrator.startOrchestration(UUID.fromString(project.getId()));
-        return mapToDto(session, false);
     }
 
     public ChatSessionDto getChat(String chatSessionId) {
@@ -150,13 +160,18 @@ public class ChatService {
     }
 
     public List<ChatSessionDto> getRecentChats() {
-        // Retrieve all chat sessions conceptually
-        List<ChatSession> all = chatSessionRepository.findAll().collectList().block();
-        if (all == null) return new ArrayList<>();
-        return all.stream()
-                .filter(s -> "COMPLETED".equals(s.getStatus()))
-                .map(s -> mapToDto(s, false))
-                .collect(Collectors.toList());
+        try {
+            // Retrieve all chat sessions conceptually
+            List<ChatSession> all = chatSessionRepository.findAll().collectList().block();
+            if (all == null) return new ArrayList<>();
+            return all.stream()
+                    .filter(s -> "COMPLETED".equals(s.getStatus()))
+                    .map(s -> mapToDto(s, false))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Failed to get recent chats: {}", e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     public List<java.util.Map<String, Object>> getChatFiles(String chatSessionId) {

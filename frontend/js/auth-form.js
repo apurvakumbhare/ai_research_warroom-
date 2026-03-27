@@ -273,6 +273,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // ── Google Sign-In ────────────────────────────────────────────────────────
+    const googleBtn = document.getElementById('google-signin-btn');
+    if (googleBtn) {
+        googleBtn.addEventListener('click', async () => {
+            console.log("Google Sign-In clicked");
+            try {
+                const result = await auth.signInWithPopup(googleProvider);
+                const idToken = await result.user.getIdToken();
+                console.log("Firebase token obtained:", idToken.substring(0, 10) + "...");
+
+                // Synchronize with backend
+                const response = await fetch('http://localhost:8080/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idToken })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('userUid', data.uid);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    console.error("Backend verification failed");
+                    showBanner(loginBanner, 'error', 'Google authentication failed at server.');
+                }
+            } catch (error) {
+                console.error("Google Popup Error:", error);
+                showBanner(loginBanner, 'error', error.message || 'Google Sign-In failed.');
+            }
+        });
+    }
+
     // ── Utility ──────────────────────────────────────────────────────────────
     function mockDelay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

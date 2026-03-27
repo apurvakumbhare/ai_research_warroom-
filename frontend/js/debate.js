@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const THROTTLE = {
         enabled : true,
         delayMs : 2000,   // ms between messages
-        maxChars: 800,    // max chars per AI message (0 = unlimited)
+        maxChars: 0,      // max chars per AI message (0 = unlimited — never cut mid-sentence)
     };
 
     // ── Session ID ────────────────────────────────────────────────────────────
@@ -101,27 +101,55 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             documents.forEach(doc => {
                 const el = document.createElement('div');
-                el.className = 'p-3 card mb-4 hover:shadow-md transition-shadow cursor-pointer';
-                el.style.borderRadius = '0.75rem';
+                el.className = 'p-3 card mb-4 hover:shadow-md transition-shadow';
+                el.style.cssText = 'border-radius: 0.75rem; position: relative;';
                 
                 const badgeText = doc.fileName && doc.fileName.toLowerCase().endsWith('.pdf') ? 'PDF' : 'DOCUMENT';
                 const badgeClass = badgeText === 'PDF' ? 'badge badge-blue' : 'badge';
                 const badgeStyle = badgeText === 'PDF' ? '' : 'style="background: var(--sand-200); color: var(--driftwood); font-size: 10px;"';
 
-                // We expect doc.uploadedAt, doc.fileName, doc.id
                 el.innerHTML = `
-                    <div class="flex justify-between mb-1">
+                    <button class="doc-delete-btn" data-doc-id="${doc.id}" title="Remove document"
+                        style="position:absolute;top:8px;right:8px;background:var(--slate-100);border:none;cursor:pointer;
+                               color:var(--slate-600);font-size:14px;line-height:1;width:24px;height:24px;border-radius:50%;
+                               display:flex;align-items:center;justify-content:center;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.1);"
+                        onmouseover="this.style.color='white';this.style.background='#dc2626';"
+                        onmouseout="this.style.color='var(--slate-600)';this.style.background='var(--slate-100)';"
+                    >✕</button>
+                    <div class="flex justify-between mb-1" style="padding-right:28px;">
                         <span class="${badgeClass}" ${badgeStyle} style="font-size: 10px;">${badgeText}</span>
                         <span style="font-size: 10px; color: var(--slate-400);">${doc.uploadedAt ? (String(doc.uploadedAt).split(' ')[0] || '') : ''}</span>
                     </div>
-                    <h4 style="font-size: 0.875rem; font-weight: 700;">${doc.fileName || 'Untitled File'}</h4>
+                    <h4 style="font-size: 0.875rem; font-weight: 700; padding-right:28px;">${doc.fileName || 'Untitled File'}</h4>
                     <p style="font-size: 0.75rem; color: var(--slate-500); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 4px;">
                         Click to view file content.
                     </p>
                 `;
-                
-                // Add click handler to fetch full text and show modal
-                el.addEventListener('click', () => openFileViewer(doc.id, doc.fileName));
+
+                // Click to view (excluding delete btn)
+                el.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('doc-delete-btn') || e.target.closest('.doc-delete-btn')) return;
+                    openFileViewer(doc.id, doc.fileName);
+                });
+
+                // Delete button
+                const deleteBtn = el.querySelector('.doc-delete-btn');
+                deleteBtn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    if (!confirm(`Remove "${doc.fileName}" from this project?`)) return;
+                    try {
+                        const token = localStorage.getItem('authToken');
+                        const resp = await fetch(`http://localhost:8080/api/projects/${currentProjectId}/uploads/${doc.id}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (!resp.ok) throw new Error(`Delete failed (${resp.status})`);
+                        showToast(`✅ "${doc.fileName}" removed.`);
+                        fetchIntelDocuments(); // refresh list
+                    } catch (err) {
+                        showToast(`⚠️ Could not delete: ${err.message}`);
+                    }
+                });
                 
                 projectIntelList.appendChild(el);
             });
@@ -475,10 +503,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Apply max-chars truncation for AI agents (not user/system)
         let content = msg.content || '';
-        const isAI = !(msg.sender || '').includes('User') && !(msg.sender || '').includes('Coordinator');
-        if (isAI && THROTTLE.enabled && THROTTLE.maxChars > 0 && content.length > THROTTLE.maxChars) {
-            content = content.slice(0, THROTTLE.maxChars) + '…';
-        }
+        if (content.trim().length === 0) content = '[Internal: Data point contains no text]';
+        // Never truncate: always show the full AI response
+        // (user can adjust via throttle slider if desired)
 
         const bgColor  = msg.color || 'var(--primary)';
         const modelBadge = msg.modelName
@@ -519,7 +546,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const textEl = card.querySelector(`#${msgId}`);
 
-        // Non-AI messages render instantly
+        // Non-AI messages (like Moderator or Coordinator) render instantly
+        const isAI = !msg.sender.includes('Moderator');
         const isInstant = !isAI || content.length === 0;
         if (isInstant) {
             textEl.textContent = content;
@@ -662,6 +690,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
                 const data = await resp.json();
+                
+                if (data.status === 'ERROR') {
+                    console.error('Backend reported session error:', data.chatSessionId);
+                    showToast('⚠️ Debate pipeline encountered an error. Retrying...');
+                    break; 
+                }
+
                 const updated = data.messages || [];
 
                 if (updated.length > messages.length) {
@@ -805,14 +840,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             fetchIntelDocuments();
 
             if (isEnded) {
-                const concludeOverlay = document.getElementById('debate-concluded-overlay');
-                if (concludeOverlay) concludeOverlay.style.display = 'flex';
+                // Correct overlay ID is 'ended-overlay'
+                endedOverlay.classList.add('visible');
                 if (endChatBtn) endChatBtn.disabled = true;
-                if (pauseBtn) pauseBtn.disabled = true;
+                if (pauseBtn)   pauseBtn.disabled   = true;
+                if (injectInput) injectInput.disabled = true;
+                if (injectBtn)   injectBtn.disabled   = true;
             }
         }
     } catch (err) {
         console.warn('Could not fetch project details:', err);
+        const titleEl = document.getElementById('debate-session-title');
+        if (titleEl) titleEl.textContent = 'Debate: Error Loading Context';
+        showToast('⚠️ Could not load project details. Please check your connection.');
     }
 
     // fetchIntelDocuments() is already called at line 164
@@ -842,18 +882,40 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method : 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (!resp.ok) console.warn('Debate POST returned non-OK:', resp.status);
-            else {
+            if (!resp.ok) {
+                console.warn('Debate POST returned non-OK:', resp.status);
+            } else {
                 console.log('Debate started for chatSession:', chatSessionId);
-                // In a perfect system, if start returns a NEW chatSessionId from a project redirect, we'd update URL. 
-                // But since we use ID interchangeably for first mount, we keep logic exactly same.
+                const sessionData = await resp.json();
+                
+                // If this is the first load and we previously had a 404, populate fields now.
+                if (!currentProjectId) {
+                    currentProjectId = sessionData.projectId;
+                    projectName      = sessionData.title || 'Debate';
+                    
+                    const titleEl     = document.getElementById('debate-session-title');
+                    const topicEl     = document.getElementById('debate-topic-text');
+                    const hypothesisEl= document.getElementById('project-hypothesis-text');
+                    
+                    if (titleEl)     titleEl.textContent     = `Live Debate: ${projectName}`;
+                    if (topicEl)     topicEl.textContent     = `Topic: ${projectName}`;
+                    if (hypothesisEl) hypothesisEl.textContent = `CONTEXT: PROJECT DOCUMENTS`;
+                    
+                    fetchIntelDocuments(); // Triggers the missing context load
+                }
             }
         }
     } catch (err) {
         console.error('Error starting debate:', err);
+        showToast('⚠️ Failed to initiate debate. Retrying...');
     }
 
-    // Begin polling
-    pollIntervalId = setInterval(pollDebateStatus, 3000);
-    pollDebateStatus(true);
+    // Begin polling (skip entirely if session already ended on load)
+    if (!isEnded) {
+        pollIntervalId = setInterval(pollDebateStatus, 8000);
+        pollDebateStatus(true);
+    } else {
+        // Session ended: just render existing messages once
+        pollDebateStatus(true);
+    }
 });

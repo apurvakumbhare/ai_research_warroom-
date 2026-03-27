@@ -43,7 +43,7 @@ public class ClaudeClient {
         Map<String, Object> userMessage = Map.of("role", "user", "content", prompt);
         Map<String, Object> body = Map.of(
                 "model", "anthropic/claude-3.5-sonnet",   // OpenRouter model identifier
-                "max_tokens", 3000,
+                "max_tokens", 500,
                 "messages", List.of(userMessage)
         );
 

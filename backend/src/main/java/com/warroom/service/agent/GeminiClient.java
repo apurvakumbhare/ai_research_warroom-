@@ -44,7 +44,7 @@ public class GeminiClient {
                 "contents", List.of(content),
                 "generationConfig", Map.of(
                         "temperature", 0.7,
-                        "maxOutputTokens", 3000
+                        "maxOutputTokens", 500
                 )
         );
 

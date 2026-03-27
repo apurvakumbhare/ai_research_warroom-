@@ -111,4 +111,17 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @DeleteMapping("/{id}/uploads/{uploadId}")
+    public ResponseEntity<Void> deleteProjectUpload(@PathVariable UUID id, @PathVariable String uploadId) {
+        log.info("Deleting upload {} for project: {}", uploadId, id);
+        try {
+            firestore.collection("projects").document(id.toString())
+                    .collection("uploads").document(uploadId).delete().get();
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            log.error("Failed to delete upload {} for project: {}", uploadId, id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
